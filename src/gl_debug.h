@@ -67,6 +67,7 @@ void print_errors(const char* function_name, const char* file_name, int line)
                 "[OpenGL Error] (%s %i):\n\tFunction: %s\n\tFile:     %s\n\tLine:     %i\n",
                 error_to_string(error), error, function_name, file_name, line
         );
+        exit(-1);
     }
 }
 
@@ -75,17 +76,17 @@ bool _check_shader_status(GLuint shaderID, GLuint status, const char* status_nam
 {
     int success = 0;
 
-    glGetShaderiv(shaderID, status, &success);
+    GLCALL(GLCALL(glGetShaderiv(shaderID, status, &success)));
 
     if (!success)
     {
         int log_size;
 
-        glGetShaderiv(shaderID, GL_INFO_LOG_LENGTH, &log_size);
+        GLCALL(glGetShaderiv(shaderID, GL_INFO_LOG_LENGTH, &log_size));
 
         char log[log_size];
 
-        glGetShaderInfoLog(shaderID, log_size, nullptr, log);
+        GLCALL(glGetShaderInfoLog(shaderID, log_size, nullptr, log));
 
         std::string formatted_log;
 
@@ -115,16 +116,16 @@ bool _check_program_status(GLuint programID, GLuint status, const char* status_n
 {
     int success = 0;
 
-    glGetProgramiv(programID, status, &success);
+    GLCALL(glGetProgramiv(programID, status, &success));
 
     if (!success) {
         int log_size;
 
-        glGetProgramiv(programID, GL_INFO_LOG_LENGTH, &log_size);
+        GLCALL(glGetProgramiv(programID, GL_INFO_LOG_LENGTH, &log_size));
 
         char log[log_size];
 
-        glGetProgramInfoLog(programID, log_size, nullptr, log);
+        GLCALL(glGetProgramInfoLog(programID, log_size, nullptr, log));
 
         std::string formatted_log;
 

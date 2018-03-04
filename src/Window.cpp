@@ -1,5 +1,5 @@
 //
-// Created by Ted Klein Brgman on 3/4/18.
+// Created by Ted Klein Bergman on 3/4/18.
 //
 #include <iostream>
 #include <array>
@@ -162,7 +162,7 @@ GLFWwindow* create_window(unsigned short width, unsigned short height, const cha
 
     GLFWimage images[2];
 
-    std::array<const char*, 2> paths {"../res/icon_large.png", "../res/icon_small.png"};
+    std::array<const char*, 2> paths {"../res/textures/icon_large.png", "../res/textures/icon_small.png"};
 
     for (unsigned int i = 0; i < paths.size(); i++)
     {
@@ -178,11 +178,13 @@ GLFWwindow* create_window(unsigned short width, unsigned short height, const cha
     return window;
 }
 
-void mainloop(GLFWwindow* window)
+void mainloop(GLFWwindow* window, void (*function)())
 {
     while (!glfwWindowShouldClose(window))
     {
         double start = glfwGetTime();
+
+        function();
 
         glfwSwapBuffers(window);
         glfwPollEvents();

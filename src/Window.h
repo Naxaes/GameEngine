@@ -9,7 +9,7 @@
 #include <GLFW/glfw3.h>
 
 GLFWwindow* create_window(unsigned short width, unsigned short height, const char* title);
-void mainloop(GLFWwindow* window);
+void mainloop(GLFWwindow* window, void (*function)());
 void terminate(GLFWwindow* window);
 
 bool initialize_glfw();
