@@ -14,6 +14,11 @@ void framebuffer_resize(GLFWwindow* window, int width, int height)
     glViewport(0, 0, width, height);
 }
 
+void window_close_callback(GLFWwindow* window)
+{
+    std::cout << "Closing the application." << std::endl;
+}
+
 int main()
 {
     // Initialize window and OpenGL
@@ -30,6 +35,7 @@ int main()
 
     glfwMakeContextCurrent(window);
     glfwSetFramebufferSizeCallback(window, framebuffer_resize);
+    glfwSetWindowCloseCallback(window, window_close_callback);
 
 
     if (window == nullptr)
@@ -45,11 +51,14 @@ int main()
     std::cout << "[Initialization] OpenGL Version: " << glGetString(GL_VERSION) << std::endl;
 
 
+    while (!glfwWindowShouldClose(window))
+    {
+        glfwSwapBuffers(window);
+        glfwPollEvents();
+    }
 
-
-
-
-    std::cout << "Hello world!" << std::endl;
+    glfwDestroyWindow(window);
+    glfwTerminate();
 
     return 0;
 
