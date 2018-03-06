@@ -1,5 +1,5 @@
 //
-// Created by Ted Klein Brgman on 1/19/18.
+// Created by Ted Klein Bergman on 1/19/18.
 //
 
 #ifndef GL_DEBUG_H

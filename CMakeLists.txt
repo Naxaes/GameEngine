@@ -15,5 +15,5 @@ include_directories("lib/glfw-3.3.1/include" "lib/glad-c/include/" "lib/stb/" "l
 file(GLOB DEPS_SOURCES lib/glad-c/src/glad.c)
 source_group("lib" FILES ${DEPS_SOURCES})
 
-add_executable(${PROJECT_NAME} src/main.cpp ${DEPS_SOURCES} src/gl_debug.h src/Window.h src/Window.cpp src/VertexArrayBuffer.cpp src/VertexArrayBuffer.h src/gl_debug.cpp)
+add_executable(${PROJECT_NAME} src/main.cpp ${DEPS_SOURCES} src/gl_debug.h src/Window.h src/Window.cpp src/VertexArrayBuffer.cpp src/VertexArrayBuffer.h src/gl_debug.cpp src/Shader.cpp src/Shader.h)
 target_link_libraries(${PROJECT_NAME} glfw ${GLFW_LIBRARIES})
