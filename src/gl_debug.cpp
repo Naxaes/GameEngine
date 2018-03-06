@@ -142,17 +142,3 @@ bool _check_program_status(GLuint programID, GLuint status, const char* status_n
 
     return true;
 }
-
-
-void _assertion(bool condition, const char* message, const char* condition_string, const char* file_name, int line)
-{
-    if (!condition)
-    {
-        fprintf(
-                stderr,
-                "[Assertion Error]:\n\tMessage:   %s\n\tCondition: %s\n\tFile:      %s\n\tLine:      %i\n",
-                message, condition_string, file_name, line
-        );
-        exit(-1);
-    }
-}

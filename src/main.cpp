@@ -8,8 +8,10 @@
 
 #include "Window.h"
 #include "gl_debug.h"
+#include "debug.h"
 #include "Shader.h"
 #include "VertexArrayBuffer.h"
+#include "Loader.h"
 
 bool initialize_opengl()
 {
@@ -20,14 +22,14 @@ bool initialize_opengl()
 }
 
 
-void draw(GLuint program, GLuint vao)
+void draw(GLuint program, GLuint vao, unsigned int count)
 {
     GLCALL(glClearColor(0.2, 0.3, 0.8, 1.0));
     GLCALL(glClear(GL_COLOR_BUFFER_BIT));
 
     GLCALL(glUseProgram(program));
     GLCALL(glBindVertexArray(vao));
-    GLCALL(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0));
+    GLCALL(glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, 0));
 }
 
 
@@ -57,10 +59,12 @@ int main()
          3, 1, 2
     };
 
+    OBJData data = load_obj_file("../res/models/cube.obj");
+
     GLuint vao = create_array_buffer();
-    GLuint vbo = create_vertex_buffer(positions, 12);
-    GLuint ibo = create_index_buffer(indices, 6);
-    bind_to_vao(vao, vbo, ibo, 5);
+    GLuint vbo = create_vertex_buffer(&data.positions[0], (unsigned int) data.positions.size());
+    GLuint ibo = create_index_buffer(&data.indices[0], (unsigned int) data.indices.size());
+    bind_to_vao(vao, vbo, ibo, 3);
 
     GLuint programID = create_shader_program("../res/shaders/basic.glsl");
 
@@ -68,7 +72,7 @@ int main()
     {
         double start = glfwGetTime();
 
-        draw(programID, vao);
+        draw(programID, vao, (unsigned int) data.indices.size());
 
         glfwSwapBuffers(window);
         glfwPollEvents();

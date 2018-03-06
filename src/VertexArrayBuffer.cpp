@@ -8,6 +8,7 @@
 
 #include <glad/glad.h>
 
+#include "debug.h"
 #include "gl_debug.h"
 
 
@@ -46,7 +47,10 @@ GLuint create_array_buffer()
 
 void bind_to_vao(GLuint vao, GLuint vbo, GLuint ibo, unsigned char count_per_vertex)
 {
-    ASSERT(count_per_vertex > 0 && count_per_vertex <= 4, "Count per vertex must be between 1 and 4.");
+    ASSERT(
+        count_per_vertex > 0 && count_per_vertex <= 4,
+        "Count per vertex must be between 1 and 4, not %d.", count_per_vertex
+    );
 
     GLCALL(glBindVertexArray(vao));
     GLCALL(glBindBuffer(GL_ARRAY_BUFFER, vbo));
