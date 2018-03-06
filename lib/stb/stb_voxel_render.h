@@ -520,7 +520,7 @@ STBVXDEC char *stbvox_get_fragment_shader(void);
 STBVXDEC char *stbvox_get_fragment_shader_alpha_only(void);
 // Returns a slightly cheaper fragment shader that computes
 // alpha but not color. This is useful for e.g. a depth-only
-// pass when using alpha test.
+// pass when using alpha tests.
 
 typedef struct stbvox_uniform_info stbvox_uniform_info;
 
@@ -3052,7 +3052,7 @@ static void stbvox_make_mesh_for_block_with_geo(stbvox_mesh_maker *mm, stbvox_po
       // than solid blocks, since detecting them is too complicated. If
       // you wanted to do something like minecraft water, you probably
       // should just do that with a separate renderer anyway. (We don't
-      // support transparency sorting so you need to use alpha test
+      // support transparency sorting so you need to use alpha tests
       // anyway)
       int i;
       for (i=0; i < 6; ++i)
@@ -3243,7 +3243,7 @@ static void stbvox_make_mesh_for_block_with_geo(stbvox_mesh_maker *mm, stbvox_po
       #endif
 
       // flag whether any sides go off the top of the block, which means
-      // our visible_faces test was wrong
+      // our visible_faces tests was wrong
       extreme = (ht[0] == 3 || ht[1] == 3 || ht[2] == 3 || ht[3] == 3);
 
       if (geo >= STBVOX_GEOM_ceil_vheight_03) {
@@ -3700,7 +3700,7 @@ int main(int argc, char **argv)
 
 // @TODO
 //
-//   - test API for texture rotation on side faces
+//   - tests API for texture rotation on side faces
 //   - API for texture rotation on top & bottom
 //   - better culling of vheight faces with vheight neighbors
 //   - better culling of non-vheight faces with vheight neighbors

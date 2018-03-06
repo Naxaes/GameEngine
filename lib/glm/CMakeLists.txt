@@ -160,7 +160,7 @@ if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
 endif()
 
 include_directories("${PROJECT_SOURCE_DIR}")
-include_directories("${PROJECT_SOURCE_DIR}/test/external")
+include_directories("${PROJECT_SOURCE_DIR}/tests/external")
 
 add_subdirectory(glm)
 add_subdirectory(test)

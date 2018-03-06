@@ -66,14 +66,14 @@ int main(int argc, char **argv)
    //test_ycbcr();
 
    #if 0
-   // test hdr asserts
+   // tests hdr asserts
    for (h=0; h < 100; h += 2)
       for (w=0; w < 200; ++w)
          hdr_data[h][w][0] = (float) rand(),
          hdr_data[h][w][1] = (float) rand(),
          hdr_data[h][w][2] = (float) rand();
 
-   stbi_write_hdr("output/test.hdr", 200,200,3,hdr_data[0][0]);
+   stbi_write_hdr("output/tests.hdr", 200,200,3,hdr_data[0][0]);
    #endif
 
    if (argc > 1) {

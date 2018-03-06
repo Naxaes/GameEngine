@@ -1,5 +1,5 @@
 //========================================================================
-// Window opacity test program
+// Window opacity tests program
 // Copyright (c) Camilla Löwy <elmindreda@glfw.org>
 //
 // This software is provided 'as-is', without any express or implied

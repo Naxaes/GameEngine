@@ -1,5 +1,5 @@
 //========================================================================
-// Joystick input test
+// Joystick input tests
 // Copyright (c) Camilla Löwy <elmindreda@glfw.org>
 //
 // This software is provided 'as-is', without any express or implied
@@ -23,7 +23,7 @@
 //
 //========================================================================
 //
-// This test displays the state of every button and axis of every connected
+// This tests displays the state of every button and axis of every connected
 // joystick and/or gamepad
 //
 //========================================================================

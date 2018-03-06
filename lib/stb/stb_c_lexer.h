@@ -186,7 +186,7 @@ typedef long       stb__clex_int;
 #endif
 
 // Convert these config options to simple conditional #defines so we can more
-// easily test them once we've change the meaning of Y/N
+// easily tests them once we've change the meaning of Y/N
 
 #if STB_C_LEX_PARSE_SUFFIXES(x)
 #define STB__clex_parse_suffixes
@@ -751,7 +751,7 @@ int stb_c_lexer_get_token(stb_lexer *lexer)
                }
             }
          #endif // defined(STB__clex_hex_ints) || defined(STB__clex_hex_floats)
-         // can't test for octal because we might parse '0.0' as float or as '0' '.' '0',
+         // can't tests for octal because we might parse '0.0' as float or as '0' '.' '0',
          // so have to do float first
 
          /* FALL THROUGH */
@@ -873,7 +873,7 @@ static void print_token(stb_lexer *lexer)
    }
 }
 
-/* Force a test
+/* Force a tests
 of parsing
 multiline comments */
 
@@ -890,7 +890,7 @@ void dummy(void)
       4.
    };
 
-   printf("test %d",1); // https://github.com/nothings/stb/issues/13
+   printf("tests %d",1); // https://github.com/nothings/stb/issues/13
 }
 
 int main(int argc, char **argv)

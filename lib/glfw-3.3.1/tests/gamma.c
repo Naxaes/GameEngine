@@ -1,5 +1,5 @@
 //========================================================================
-// Gamma correction test program
+// Gamma correction tests program
 // Copyright (c) Camilla Löwy <elmindreda@glfw.org>
 //
 // This software is provided 'as-is', without any express or implied
@@ -23,7 +23,7 @@
 //
 //========================================================================
 //
-// This program is used to test the gamma correction functionality for
+// This program is used to tests the gamma correction functionality for
 // both full screen and windowed mode windows
 //
 //========================================================================

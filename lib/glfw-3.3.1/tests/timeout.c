@@ -1,5 +1,5 @@
 //========================================================================
-// Event wait timeout test
+// Event wait timeout tests
 // Copyright (c) Camilla Löwy <elmindreda@glfw.org>
 //
 // This software is provided 'as-is', without any express or implied
@@ -23,7 +23,7 @@
 //
 //========================================================================
 //
-// This test is intended to verify that waiting for events with timeout works
+// This tests is intended to verify that waiting for events with timeout works
 //
 //========================================================================
 

@@ -479,7 +479,7 @@ static void stbi_rewind(stbi *s)
 {
    // conceptually rewind SHOULD rewind to the beginning of the stream,
    // but we just rewind to the beginning of the initial buffer, because
-   // we only use it after doing 'test', which only ever looks at at most 92 bytes
+   // we only use it after doing 'tests', which only ever looks at at most 92 bytes
    s->img_buffer = s->img_buffer_original;
 }
 
@@ -562,7 +562,7 @@ static unsigned char *stbi_load_main(stbi *s, int *x, int *y, int *comp, int req
    }
    #endif
 
-   // test tga last because it's a crappy test!
+   // tests tga last because it's a crappy tests!
    if (stbi_tga_test(s))
       return stbi_tga_load(s,x,y,comp,req_comp);
    return epuc("unknown image type", "Image not of any known type, or corrupt");
@@ -1105,8 +1105,8 @@ stbi_inline static int decode(jpeg *j, huffman *h)
       return h->values[k];
    }
 
-   // naive test is to shift the code_buffer down so k bits are
-   // valid, then test against maxcode. To speed this up, we've
+   // naive tests is to shift the code_buffer down so k bits are
+   // valid, then tests against maxcode. To speed this up, we've
    // preshifted maxcode left so that it has (16-k) 0s at the
    // end; in other words, regardless of the number of bits, it
    // wants to be compared against something shifted to have 16;
@@ -1152,7 +1152,7 @@ stbi_inline static int extend_receive(jpeg *j, int n)
    j->code_bits -= n;
    j->code_buffer <<= n;
    #endif
-   // the following test is probably a random branch that won't
+   // the following tests is probably a random branch that won't
    // predict well. I tried to table accelerate it but failed.
    // maybe it's compiling as a conditional move?
    if (k < m)
@@ -1216,7 +1216,7 @@ static int decode_block(jpeg *j, short data[64], huffman *hdc, huffman *hac, int
 // take a -128..127 value and clamp it and convert to 0..255
 stbi_inline static stbi__uint8 clamp(int x)
 {
-   // trick to use a single test to catch both cases
+   // trick to use a single tests to catch both cases
    if ((unsigned int) x > 255) {
       if (x < 0) return 0;
       if (x > 255) return 255;
@@ -3193,12 +3193,12 @@ static int tga_info(stbi *s, int *x, int *y, int *comp)
     tga_w = get16le(s);
     if( tga_w < 1 ) {
         stbi_rewind(s);
-        return 0;   // test width
+        return 0;   // tests width
     }
     tga_h = get16le(s);
     if( tga_h < 1 ) {
         stbi_rewind(s);
-        return 0;   // test height
+        return 0;   // tests height
     }
     sz = get8(s);               // bits per pixel
     // only RGB or RGBA or grey allowed
@@ -3231,8 +3231,8 @@ static int tga_test(stbi *s)
    get8(s);         //   discard bits per palette color entry
    get16(s);      //   discard x origin
    get16(s);      //   discard y origin
-   if ( get16(s) < 1 ) return 0;      //   test width
-   if ( get16(s) < 1 ) return 0;      //   test height
+   if ( get16(s) < 1 ) return 0;      //   tests width
+   if ( get16(s) < 1 ) return 0;      //   tests height
    sz = get8(s);   //   bits per pixel
    if ( (sz != 8) && (sz != 16) && (sz != 24) && (sz != 32) ) return 0;   //   only RGB or RGBA or grey allowed
    return 1;      //   seems to have passed everything
@@ -4532,7 +4532,7 @@ static int stbi_info_main(stbi *s, int *x, int *y, int *comp)
    if (stbi_hdr_info(s, x, y, comp))
        return 1;
    #endif
-   // test tga last because it's a crappy test!
+   // tests tga last because it's a crappy tests!
    if (stbi_tga_info(s, x, y, comp))
        return 1;
    return e("unknown image type", "Image not of any known type, or corrupt");
@@ -4600,7 +4600,7 @@ int stbi_info_from_callbacks(stbi_io_callbacks const *c, void *user, int *x, int
              a few more leak fixes, bug in PNG handling (SpartanJ)
       1.30 (2011-06-11)
              added ability to load files via callbacks to accomidate custom input streams (Ben Wenger)
-             removed deprecated format-specific test/load functions
+             removed deprecated format-specific tests/load functions
              removed support for installable file formats (stbi_loader) -- would have been broken for IO callbacks anyway
              error cases in bmp and tga give messages and don't leak (Raymond Barbiero, grisha)
              fix inefficiency in decoding 32-bit BMP (David Woo)
@@ -4673,6 +4673,6 @@ int stbi_info_from_callbacks(stbi_io_callbacks const *c, void *user, int *x, int
       0.53   fix bug in png 3->4; speedup png decoding
       0.52   png handles req_comp=3,4 directly; minor cleanup; jpeg comments
       0.51   obey req_comp requests, 1-component jpegs return as 1-component,
-             on 'test' only check type, not whether we support this variant
+             on 'tests' only check type, not whether we support this variant
       0.50   first released version
 */

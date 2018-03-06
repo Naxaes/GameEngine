@@ -29,7 +29,7 @@
 // will generate a main() and compiling the result will create a
 // program that tests the implementation. Run it with no arguments
 // and any output indicates an error; run it with any argument and
-// it will also print the test results. Define STB_DIVIDE_TEST_64
+// it will also print the tests results. Define STB_DIVIDE_TEST_64
 // to a 64-bit integer type to avoid overflows in the result-checking
 // which give false negatives.
 //
@@ -119,7 +119,7 @@ extern int stb_mod_eucl (int value_to_be_divided, int value_to_divide_by);
 #else
    // implement floor-style divide on trunc platform
    #ifndef C_INTEGER_DIVISION_TRUNCATES
-   #error "floor test requires truncating division"
+   #error "floor tests requires truncating division"
    #endif
    #undef C_INTEGER_DIVISION_TRUNCATES
    int stb__div(int v1, int v2)
@@ -294,7 +294,7 @@ void stbdiv_check(int q, int r, int a, int b, char *type, int dir)
    #endif
 }
 
-void test(int a, int b)
+void tests(int a, int b)
 {
    int q,r;
    if (show) printf("(%+11d,%+d) |  ", a,b);
@@ -322,38 +322,38 @@ int main(int argc, char **argv)
 {
    if (argc > 1) show=1;
 
-   test(8,3);
-   test(8,-3);
-   test(-8,3);
-   test(-8,-3);
-   test(1,2);
-   test(1,-2);
-   test(-1,2);
-   test(-1,-2);
-   test(8,4);
-   test(8,-4);
-   test(-8,4);
-   test(-8,-4);
+   tests(8,3);
+   tests(8,-3);
+   tests(-8,3);
+   tests(-8,-3);
+   tests(1,2);
+   tests(1,-2);
+   tests(-1,2);
+   tests(-1,-2);
+   tests(8,4);
+   tests(8,-4);
+   tests(-8,4);
+   tests(-8,-4);
 
-   test(INT_MAX,1);
-   test(INT_MIN,1);
-   test(INT_MIN+1,1);
-   test(INT_MAX,-1);
-   //test(INT_MIN,-1); // this traps in MSVC, so we leave it untested
-   test(INT_MIN+1,-1);
-   test(INT_MIN,-2);
-   test(INT_MIN+1,2);
-   test(INT_MIN+1,-2);
-   test(INT_MAX,2);
-   test(INT_MAX,-2);
-   test(INT_MIN+1,2);
-   test(INT_MIN+1,-2);
-   test(INT_MIN,2);
-   test(INT_MIN,-2);
-   test(INT_MIN,7);
-   test(INT_MIN,-7);
-   test(INT_MIN+1,4);
-   test(INT_MIN+1,-4);
+   tests(INT_MAX,1);
+   tests(INT_MIN,1);
+   tests(INT_MIN+1,1);
+   tests(INT_MAX,-1);
+   //tests(INT_MIN,-1); // this traps in MSVC, so we leave it untested
+   tests(INT_MIN+1,-1);
+   tests(INT_MIN,-2);
+   tests(INT_MIN+1,2);
+   tests(INT_MIN+1,-2);
+   tests(INT_MAX,2);
+   tests(INT_MAX,-2);
+   tests(INT_MIN+1,2);
+   tests(INT_MIN+1,-2);
+   tests(INT_MIN,2);
+   tests(INT_MIN,-2);
+   tests(INT_MIN,7);
+   tests(INT_MIN,-7);
+   tests(INT_MIN+1,4);
+   tests(INT_MIN+1,-4);
 
    testh(-7, INT_MIN);
    testh(-1, INT_MIN);

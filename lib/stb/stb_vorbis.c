@@ -84,7 +84,7 @@ extern "C" {
 // and alloca() to allocate temporary memory during a frame on the
 // stack. (Memory consumption will depend on the amount of setup
 // data in the file and how you set the compile flags for speed
-// vs. size. In my test files the maximal-size usage is ~150KB.)
+// vs. size. In my tests files the maximal-size usage is ~150KB.)
 //
 // You can modify the wrapper functions in the source (setup_malloc,
 // setup_temp_malloc, temp_malloc) to change this behavior, or you

@@ -101,7 +101,7 @@ int main(int argc, char **argv)
          int error;
          stb_vorbis *v = stb_vorbis_open_filename(argv[j], &error, NULL);
          if (v == NULL) {
-            fprintf(stderr, "Couldn't re-open %s for test #%d\n", argv[j], test);
+            fprintf(stderr, "Couldn't re-open %s for tests #%d\n", argv[j], test);
             goto fail;
          }
          for (phase=0; phase < 3; ++phase) {

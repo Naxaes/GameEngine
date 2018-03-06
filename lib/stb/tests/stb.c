@@ -352,7 +352,7 @@ void test_threads2(void)
 }
 #endif
 
-char tc[] = "testing compression test quick test voila woohoo what the hell";
+char tc[] = "testing compression tests quick tests voila woohoo what the hell";
 
 char storage1[1 << 23];
 int test_compression(char *buffer, int length)
@@ -577,7 +577,7 @@ int main(int argc, char **argv)
    stb__wchar buffer7[1024],buffer9[1024];
    char buffer8[4096];
    FILE *f;
-   char *p1 = "foo/bar\\baz/test.xyz";
+   char *p1 = "foo/bar\\baz/tests.xyz";
    char *p2 = "foo/.bar";
    char *p3 = "foo.bar";
    char *p4 = "foo/bar";
@@ -1033,10 +1033,10 @@ int main(int argc, char **argv)
 #endif
 
    c(!strcmp(stb_splitpath(buf, p1, STB_PATH      ), "foo/bar\\baz/"), "stb_splitpath 1");
-   c(!strcmp(stb_splitpath(buf, p1, STB_FILE      ), "test"), "stb_splitpath 2");
+   c(!strcmp(stb_splitpath(buf, p1, STB_FILE      ), "tests"), "stb_splitpath 2");
    c(!strcmp(stb_splitpath(buf, p1, STB_EXT       ), ".xyz"), "stb_splitpath 3");
-   c(!strcmp(stb_splitpath(buf, p1, STB_PATH_FILE ), "foo/bar\\baz/test"), "stb_splitpath 4");
-   c(!strcmp(stb_splitpath(buf, p1, STB_FILE_EXT  ), "test.xyz"), "stb_splitpath 5");
+   c(!strcmp(stb_splitpath(buf, p1, STB_PATH_FILE ), "foo/bar\\baz/tests"), "stb_splitpath 4");
+   c(!strcmp(stb_splitpath(buf, p1, STB_FILE_EXT  ), "tests.xyz"), "stb_splitpath 5");
 
    c(!strcmp(stb_splitpath(buf, p2, STB_PATH      ), "foo/"), "stb_splitpath 6");
    c(!strcmp(stb_splitpath(buf, p2, STB_FILE      ), ""), "stb_splitpath 7");
@@ -1211,23 +1211,23 @@ int main(int argc, char **argv)
    }
 
    #if 1
-   f= stb_fopen("data/stb.test", "wb");
+   f= stb_fopen("data/stb.tests", "wb");
    fwrite(buffer, 1, sizeof(buffer)-1, f);
    stb_fclose(f, stb_keep_yes);
    #ifndef WIN32
    sleep(1);  // andLinux has some synchronization problem here
    #endif
    #else
-   f= fopen("data/stb.test", "wb");
+   f= fopen("data/stb.tests", "wb");
    fwrite(buffer, 1, sizeof(buffer)-1, f);
    fclose(f);
    #endif
-   if (!stb_fexists("data/stb.test")) {
+   if (!stb_fexists("data/stb.tests")) {
       fprintf(stderr, "Error: couldn't open file just written, or stb_fexists() is broken.\n");
    }
 
-   f = fopen("data/stb.test", "rb");
-   // f = NULL; // test stb_fatal()
+   f = fopen("data/stb.tests", "rb");
+   // f = NULL; // tests stb_fatal()
    if (!f) { stb_fatal("Error: couldn't open file just written\n"); }
    else {
       char temp[4];
@@ -1240,7 +1240,7 @@ int main(int argc, char **argv)
          stb_fatal("Read 0, but neither feof nor ferror is true");
       }
       fclose(f);
-      p = stb_file("data/stb.test", &len2);
+      p = stb_file("data/stb.tests", &len2);
       if (p == NULL) stb_fatal("Error: stb_file() failed");
       c(len1 == sizeof(buffer)-1, "stb_filelen()");
       c(len2 == sizeof(buffer)-1, "stb_file():n");
@@ -1248,7 +1248,7 @@ int main(int argc, char **argv)
       c(strcmp(p, buffer)==0, "stb_file() terminated");
       free(p);
 
-      s = stb_stringfile("data/stb.test", &n1);
+      s = stb_stringfile("data/stb.tests", &n1);
       c(n1 == 3, "stb_stringfile():n");
       n2 = 0;
       while (s[n2]) ++n2;
@@ -1260,7 +1260,7 @@ int main(int argc, char **argv)
       }
       free(s);
 
-      f = fopen("data/stb.test", "rb");
+      f = fopen("data/stb.tests", "rb");
       stb_fgets(buf, sizeof(buf), f);
       //c(strcmp(buf, str1)==0, "stb_fgets()");
       p = stb_fgets_malloc(f);
@@ -1475,10 +1475,10 @@ int main(int argc, char **argv)
       #endif
       free(p);
    } else {
-      fprintf(stderr, "No stb.h to compression test.\n");
+      fprintf(stderr, "No stb.h to compression tests.\n");
    }
 
-   p = stb_file("data/test.bmp", &len2);
+   p = stb_file("data/tests.bmp", &len2);
    if (p) {
       n = test_compression(p, len2);
       c(n == 106141, "stb_compress()/stb_decompress() 4");
@@ -1568,7 +1568,7 @@ int main(int argc, char **argv)
 
 
 
-// NIST test vectors
+// NIST tests vectors
 
 struct
 {
@@ -2181,13 +2181,13 @@ void test_sha1(void)
       }
       {
          int z;
-         FILE *f = fopen("data/test.bin", "wb");
-         if (!f) stb_fatal("Couldn't write to test.bin");
+         FILE *f = fopen("data/tests.bin", "wb");
+         if (!f) stb_fatal("Couldn't write to tests.bin");
          fwrite(buffer, len, 1, f);
          fclose(f);
          #ifdef _WIN32
-         z = stb_sha1_file(fdig, "data/test.bin");
-         if (!z) stb_fatal("Couldn't digest test.bin");
+         z = stb_sha1_file(fdig, "data/tests.bin");
+         if (!z) stb_fatal("Couldn't digest tests.bin");
          c(memcmp(digest, fdig, 20)==0, "stb_sh1_file");
          #endif
       }
@@ -3083,7 +3083,7 @@ int main(int argc, char **argv)
    for (i=0; i < NUM_WORK; ++i) {
       stb_work_reach(work_consumer, NULL, NULL, s);
    }
-   printf("Started stb_work test.\n");
+   printf("Started stb_work tests.\n");
 
    t1 = 1;
 
@@ -3165,7 +3165,7 @@ int main(int argc, char **argv)
    }
 
    stb_sync_reach_and_wait(s);
-   printf("stb_work test completed ok.\n");
+   printf("stb_work tests completed ok.\n");
    return 0;
 }
 #endif

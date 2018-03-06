@@ -1,5 +1,5 @@
 //========================================================================
-// Input lag test
+// Input lag tests
 // Copyright (c) Camilla Löwy <elmindreda@glfw.org>
 //
 // This software is provided 'as-is', without any express or implied
@@ -23,7 +23,7 @@
 //
 //========================================================================
 //
-// This test renders a marker at the cursor position reported by GLFW to
+// This tests renders a marker at the cursor position reported by GLFW to
 // check how much it lags behind the hardware mouse cursor
 //
 //========================================================================
@@ -200,7 +200,7 @@ int main(int argc, char** argv)
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 
-    window = glfwCreateWindow(width, height, "Input lag test", monitor, NULL);
+    window = glfwCreateWindow(width, height, "Input lag tests", monitor, NULL);
     if (!window)
     {
         glfwTerminate();

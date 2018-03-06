@@ -152,7 +152,7 @@ static int translateKeyCode(int scancode)
         case XK_KP_Subtract:    return GLFW_KEY_KP_SUBTRACT;
         case XK_KP_Add:         return GLFW_KEY_KP_ADD;
 
-        // These should have been detected in secondary keysym test above!
+        // These should have been detected in secondary keysym tests above!
         case XK_KP_Insert:      return GLFW_KEY_KP_0;
         case XK_KP_End:         return GLFW_KEY_KP_1;
         case XK_KP_Down:        return GLFW_KEY_KP_2;

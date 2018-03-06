@@ -1,5 +1,5 @@
 //========================================================================
-// UTF-8 window title test
+// UTF-8 window title tests
 // Copyright (c) Camilla Löwy <elmindreda@glfw.org>
 //
 // This software is provided 'as-is', without any express or implied
@@ -23,7 +23,7 @@
 //
 //========================================================================
 //
-// This test sets a UTF-8 window title
+// This tests sets a UTF-8 window title
 //
 //========================================================================
 

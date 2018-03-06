@@ -1,6 +1,8 @@
 //
 // Created by Ted Klein Bergman on 3/4/18.
 //
+#include "Window.h"
+
 #include <iostream>
 #include <array>
 
@@ -10,7 +12,6 @@
 #include <glad/glad.h>       // Must include glad before glfw!
 #include <GLFW/glfw3.h>
 
-#include "Window.h"
 
 
 void framebuffer_resize_callback(GLFWwindow* window, int width, int height)

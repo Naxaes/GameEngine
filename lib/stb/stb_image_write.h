@@ -597,7 +597,7 @@ void stbiw__write_hdr_scanline(stbi__write_context *s, int width, int ncomp, uns
                x += len;
             }
             // if there's a run, output it
-            if (r+2 < width) { // same test as what we break out of in search loop, so only true if we break'd
+            if (r+2 < width) { // same tests as what we break out of in search loop, so only true if we break'd
                // find next byte after run
                while (r < width && comp[r] == comp[x])
                   ++r;

@@ -115,7 +115,7 @@ static region *get_region(int reg_x, int reg_z)
 
 // @TODO: is it really worth caching these? we probably can just
 // pull them from the disk cache nearly as efficiently.
-// Can test that by setting to 1x1?
+// Can tests that by setting to 1x1?
 compressed_chunk *cached_chunk[NUM_CACHED_Z][NUM_CACHED_X];
 
 static void deref_compressed_chunk(compressed_chunk *cc)

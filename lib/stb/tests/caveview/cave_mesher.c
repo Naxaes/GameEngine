@@ -21,8 +21,8 @@
 #define STBVOX_CONFIG_PREFER_TEXBUFFER
 //#define STBVOX_CONFIG_LIGHTING_SIMPLE
 #define STBVOX_CONFIG_FOG_SMOOTHSTEP
-//#define STBVOX_CONFIG_PREMULTIPLIED_ALPHA  // this doesn't work properly alpha test without next #define
-//#define STBVOX_CONFIG_UNPREMULTIPLY  // slower, fixes alpha test makes windows & fancy leaves look better
+//#define STBVOX_CONFIG_PREMULTIPLIED_ALPHA  // this doesn't work properly alpha tests without next #define
+//#define STBVOX_CONFIG_UNPREMULTIPLY  // slower, fixes alpha tests makes windows & fancy leaves look better
 //#define STBVOX_CONFIG_TEX1_EDGE_CLAMP
 #define STBVOX_CONFIG_DISABLE_TEX2
 //#define STBVOX_CONFIG_DOWN_TEXLERP_PACKED
@@ -675,7 +675,7 @@ void build_chunk(int chunk_x, int chunk_y, fast_chunk *fc_table[4][4], raw_mesh 
       #endif
 
       #ifdef VHEIGHT_TEST
-      // hacky test of vheight
+      // hacky tests of vheight
       for (a=0; a < 34; ++a) {
          for (b=0; b < 34; ++b) {
             int c;
@@ -899,13 +899,13 @@ void mesh_init(void)
 
 // 5.16s  - using empty bitmasks to early out
 // 5.01s  - using solid & empty bitmasks to early out - "foo"
-// 4.64s  - empty bitmask only, test 8 at a time, then test geom
-// 4.72s  - empty bitmask only, 8 at a time, then test bits
+// 4.64s  - empty bitmask only, tests 8 at a time, then tests geom
+// 4.72s  - empty bitmask only, 8 at a time, then tests bits
 // 4.46s  - split bitmask building into three loops (each byte is separate)
 // 4.42s  - further optimize computing bitmask
 
 // 4.58s  - using solid & empty bitmasks to early out, same as "foo" but faster bitmask building
-// 4.12s  - using solid & empty bitmasks to efficiently test neighbors
+// 4.12s  - using solid & empty bitmasks to efficiently tests neighbors
 // 4.04s  - using 16-bit fetches (not endian-independent)
 //        - note this is first place that beats previous best '4.10s - 34x34 1 mesh'
 

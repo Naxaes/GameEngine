@@ -37,6 +37,6 @@
 int quicktest(void)
 {
    char buffer[999];
-   stbsp_sprintf(buffer, "test%%test");
+   stbsp_sprintf(buffer, "tests%%tests");
    return 0;
 }

@@ -191,7 +191,7 @@ void draw_world(void)
          glRotatef(rotate_t*2,0,0,1);
          glTranslatef(-100,-150,0);
       }
-      print(x,100, font, "This is a test");
+      print(x,100, font, "This is a tests");
       print(x,130, font, "Now is the time for all good men to come to the aid of their country.");
       print(x,160, font, "The quick brown fox jumps over the lazy dog.");
       print(x,190, font, "0123456789");

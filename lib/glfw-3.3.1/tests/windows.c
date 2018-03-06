@@ -1,5 +1,5 @@
 //========================================================================
-// Simple multi-window test
+// Simple multi-window tests
 // Copyright (c) Camilla Löwy <elmindreda@glfw.org>
 //
 // This software is provided 'as-is', without any express or implied
@@ -23,7 +23,7 @@
 //
 //========================================================================
 //
-// This test creates four windows and clears each in a different color
+// This tests creates four windows and clears each in a different color
 //
 //========================================================================
 

@@ -1952,7 +1952,7 @@ static void demo_init_vk(struct demo *demo) {
     }
 
     // Having these GIPA queries of device extension entry points both
-    // BEFORE and AFTER vkCreateDevice is a good test for the loader
+    // BEFORE and AFTER vkCreateDevice is a good tests for the loader
     GET_INSTANCE_PROC_ADDR(demo->inst, GetPhysicalDeviceSurfaceCapabilitiesKHR);
     GET_INSTANCE_PROC_ADDR(demo->inst, GetPhysicalDeviceSurfaceFormatsKHR);
     GET_INSTANCE_PROC_ADDR(demo->inst, GetPhysicalDeviceSurfacePresentModesKHR);

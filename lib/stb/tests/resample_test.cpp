@@ -81,7 +81,7 @@ static size_t g_aiMT[MT_SIZE];
 static size_t g_iMTI = 0;
 
 // Mersenne Twister implementation from Wikipedia.
-// Avoiding use of the system rand() to be sure that our tests generate the same test data on any system.
+// Avoiding use of the system rand() to be sure that our tests generate the same tests data on any system.
 void mtsrand(size_t iSeed)
 {
 	g_aiMT[0] = iSeed;
@@ -245,7 +245,7 @@ void test_format(const char* file, float width_percent, float height_percent, st
 	convert_image<T, unsigned char>(output_data, char_data, new_w * new_h * n);
 
 	char output[200];
-	sprintf(output, "test-output/type-%d-%d-%d-%d-%s", type, colorspace, new_w, new_h, file);
+	sprintf(output, "tests-output/type-%d-%d-%d-%d-%s", type, colorspace, new_w, new_h, file);
 	stbi_write_png(output, new_w, new_h, n, char_data, 0);
 
 	free(char_data);
@@ -289,7 +289,7 @@ void test_float(const char* file, float width_percent, float height_percent, stb
 	convert_image_float(output_data, char_data, new_w * new_h * n);
 
 	char output[200];
-	sprintf(output, "test-output/type-%d-%d-%d-%d-%s", type, colorspace, new_w, new_h, file);
+	sprintf(output, "tests-output/type-%d-%d-%d-%d-%s", type, colorspace, new_w, new_h, file);
 	stbi_write_png(output, new_w, new_h, n, char_data, 0);
 
 	free(char_data);
@@ -326,7 +326,7 @@ void test_channels(const char* file, float width_percent, float height_percent, 
 	stbi_image_free(input_data);
 
 	char output[200];
-	sprintf(output, "test-output/channels-%d-%d-%d-%s", channels, new_w, new_h, file);
+	sprintf(output, "tests-output/channels-%d-%d-%d-%s", channels, new_w, new_h, file);
 	stbi_write_png(output, new_w, new_h, channels, output_data, 0);
 
 	free(output_data);
@@ -353,7 +353,7 @@ void test_subpixel(const char* file, float width_percent, float height_percent, 
 	stbi_image_free(input_data);
 
 	char output[200];
-	sprintf(output, "test-output/subpixel-%d-%d-%f-%f-%s", new_w, new_h, s1, t1, file);
+	sprintf(output, "tests-output/subpixel-%d-%d-%f-%f-%s", new_w, new_h, s1, t1, file);
 	stbi_write_png(output, new_w, new_h, n, output_data, 0);
 
 	free(output_data);
@@ -377,7 +377,7 @@ void test_subpixel_region(const char* file, float width_percent, float height_pe
 	stbi_image_free(input_data);
 
 	char output[200];
-	sprintf(output, "test-output/subpixel-region-%d-%d-%f-%f-%f-%f-%s", new_w, new_h, s0, t0, s1, t1, file);
+	sprintf(output, "tests-output/subpixel-region-%d-%d-%f-%f-%f-%f-%s", new_w, new_h, s0, t0, s1, t1, file);
 	stbi_write_png(output, new_w, new_h, n, output_data, 0);
 
 	free(output_data);
@@ -401,7 +401,7 @@ void test_subpixel_command(const char* file, float width_percent, float height_p
 	stbi_image_free(input_data);
 
 	char output[200];
-	sprintf(output, "test-output/subpixel-command-%d-%d-%f-%f-%f-%f-%s", new_w, new_h, x_scale, y_scale, x_offset, y_offset, file);
+	sprintf(output, "tests-output/subpixel-command-%d-%d-%f-%f-%f-%f-%s", new_w, new_h, x_scale, y_scale, x_offset, y_offset, file);
 	stbi_write_png(output, new_w, new_h, n, output_data, 0);
 
 	free(output_data);
@@ -420,7 +420,7 @@ void test_premul()
 
 	memset(input, 0, sizeof(input));
 
-	// First a test to make sure premul is working properly.
+	// First a tests to make sure premul is working properly.
 
 	// Top left - solid red
 	*pixel(input, 0, 0, 0, 2, 4) = 255;
@@ -451,7 +451,7 @@ void test_premul()
 	STBIR_ASSERT(output[2] == 0);
 	STBIR_ASSERT(output[3] == (unsigned int)(a * 4294967296 + 0.5f)); // 140
 
-	// Now a test to make sure it doesn't clobber existing values.
+	// Now a tests to make sure it doesn't clobber existing values.
 
 	// Top right - completely transparent green
 	*pixel(input, 1, 0, 1, 2, 4) = 255;
@@ -484,7 +484,7 @@ void test_premul()
 	STBIR_ASSERT(*pixel(output2, 1, 1, 3, 2, 4) == 0);
 }
 
-// test that splitting a pow-2 image into tiles produces identical results
+// tests that splitting a pow-2 image into tiles produces identical results
 void test_subpixel_1()
 {
 	unsigned char image[8 * 8];
@@ -526,7 +526,7 @@ void test_subpixel_1()
 	}}
 }
 
-// test that replicating an image and using a subtile of it produces same results as wraparound
+// tests that replicating an image and using a subtile of it produces same results as wraparound
 void test_subpixel_2()
 {
 	unsigned char image[8 * 8];
@@ -571,7 +571,7 @@ void test_subpixel_2()
 	}}
 }
 
-// test that 0,0,1,1 subpixel produces same result as no-rect
+// tests that 0,0,1,1 subpixel produces same result as no-rect
 void test_subpixel_3()
 {
 	unsigned char image[8 * 8];
@@ -602,7 +602,7 @@ void test_subpixel_3()
 	}}
 }
 
-// test that 1:1 resample using s,t=0,0,1,1 with bilinear produces original image
+// tests that 1:1 resample using s,t=0,0,1,1 with bilinear produces original image
 void test_subpixel_4()
 {
 	unsigned char image[8 * 8];
@@ -731,7 +731,7 @@ void test_filters(void)
 	verify_filter_normalized(STBIR_FILTER_MITCHELL, 1, value);
 
 	{
-		// This test is designed to produce coefficients that are very badly denormalized.
+		// This tests is designed to produce coefficients that are very badly denormalized.
 		unsigned int v = 556;
 
 		unsigned int input[100 * 100];
@@ -747,7 +747,7 @@ void test_filters(void)
 	}
 
 	{
-		// Now test the trapezoid filter for downsampling.
+		// Now tests the trapezoid filter for downsampling.
 		unsigned int input[3 * 1];
 		unsigned int output[2 * 1];
 
@@ -767,7 +767,7 @@ void test_filters(void)
 	}
 
 	{
-		// Now test the trapezoid filter for upsampling.
+		// Now tests the trapezoid filter for upsampling.
 		unsigned int input[2 * 1];
 		unsigned int output[3 * 1];
 
@@ -821,7 +821,7 @@ void test_filters(void)
 		STBIR_ASSERT(output[127 / 2] == 128);
 		STBIR_ASSERT(output[127 / 2 + 1] == 255);
 		STBIR_ASSERT(output[126] == 255);
-		stbi_write_png("test-output/trapezoid-upsample-horizontal.png", 127, 1, 1, output, 0);
+		stbi_write_png("tests-output/trapezoid-upsample-horizontal.png", 127, 1, 1, output, 0);
 
 		stbir_resize(input, 1, 2, 0, output, 1, 127, 0, STBIR_TYPE_UINT8, 1, STBIR_ALPHA_CHANNEL_NONE, 0, STBIR_EDGE_CLAMP, STBIR_EDGE_CLAMP, STBIR_FILTER_BOX, STBIR_FILTER_BOX, STBIR_COLORSPACE_LINEAR, NULL);
 		STBIR_ASSERT(output[0] == 0);
@@ -829,7 +829,7 @@ void test_filters(void)
 		STBIR_ASSERT(output[127 / 2] == 128);
 		STBIR_ASSERT(output[127 / 2 + 1] == 255);
 		STBIR_ASSERT(output[126] == 255);
-		stbi_write_png("test-output/trapezoid-upsample-vertical.png", 1, 127, 1, output, 0);
+		stbi_write_png("tests-output/trapezoid-upsample-vertical.png", 1, 127, 1, output, 0);
 	}
 }
 
@@ -859,12 +859,12 @@ static void test_32(void)
     out_w = w*33/16;
     out_h = h*33/16;
     stbir_resize(input,w,h,0,output,out_w,out_h,0,STBIR_TYPE_UINT32,3,-1,0,STBIR_EDGE_CLAMP,STBIR_EDGE_CLAMP,STBIR_FILTER_DEFAULT,STBIR_FILTER_DEFAULT,STBIR_COLORSPACE_LINEAR,NULL);
-    write32("test-output/seantest_1.png", output,out_w,out_h);
+    write32("tests-output/seantest_1.png", output,out_w,out_h);
 
     out_w = w*16/33;
     out_h = h*16/33;
     stbir_resize(input,w,h,0,output,out_w,out_h,0,STBIR_TYPE_UINT32,3,-1,0,STBIR_EDGE_CLAMP,STBIR_EDGE_CLAMP,STBIR_FILTER_DEFAULT,STBIR_FILTER_DEFAULT,STBIR_COLORSPACE_LINEAR,NULL);
-    write32("test-output/seantest_2.png", output,out_w,out_h);
+    write32("tests-output/seantest_2.png", output,out_w,out_h);
 }
 
 
@@ -873,7 +873,7 @@ void test_suite(int argc, char **argv)
 	int i;
 	const char *barbara;
 
-	mkdir("test-output", 777);
+	mkdir("tests-output", 777);
 
 	if (argc > 1)
 		barbara = argv[1];
@@ -927,7 +927,7 @@ void test_suite(int argc, char **argv)
 	}
 #endif
 
-	// old tests that hacky fix worked on - test that
+	// old tests that hacky fix worked on - tests that
 	// every uint8 maps to itself
 	for (i = 0; i < 256; i++) {
 		float f = stbir__srgb_to_linear(float(i) / 255);
@@ -935,7 +935,7 @@ void test_suite(int argc, char **argv)
 		STBIR_ASSERT(n == i);
 	}
 
-	// new tests that hacky fix failed for - test that
+	// new tests that hacky fix failed for - tests that
 	// values adjacent to uint8 round to nearest uint8
 	for (i = 0; i < 256; i++) {
 		for (float y = -0.42f; y <= 0.42f; y += 0.01f) {
@@ -1027,7 +1027,7 @@ void test_suite(int argc, char **argv)
 		test_subpixel(barbara, 2, 2, 1, (float)i / 10);
    }
 
-	// Channels test
+	// Channels tests
 	test_channels(barbara, 0.5f, 0.5f, 1);
 	test_channels(barbara, 0.5f, 0.5f, 2);
 	test_channels(barbara, 0.5f, 0.5f, 3);
@@ -1039,50 +1039,50 @@ void test_suite(int argc, char **argv)
 	test_channels(barbara, 2, 2, 4);
 
 	// filter tests
-	resize_image(barbara, 2, 2, STBIR_FILTER_BOX         , STBIR_EDGE_CLAMP, STBIR_COLORSPACE_SRGB, "test-output/barbara-upsample-nearest.png");
-	resize_image(barbara, 2, 2, STBIR_FILTER_TRIANGLE    , STBIR_EDGE_CLAMP, STBIR_COLORSPACE_SRGB, "test-output/barbara-upsample-bilinear.png");
-	resize_image(barbara, 2, 2, STBIR_FILTER_CUBICBSPLINE, STBIR_EDGE_CLAMP, STBIR_COLORSPACE_SRGB, "test-output/barbara-upsample-bicubic.png");
-	resize_image(barbara, 2, 2, STBIR_FILTER_CATMULLROM  , STBIR_EDGE_CLAMP, STBIR_COLORSPACE_SRGB, "test-output/barbara-upsample-catmullrom.png");
-	resize_image(barbara, 2, 2, STBIR_FILTER_MITCHELL    , STBIR_EDGE_CLAMP, STBIR_COLORSPACE_SRGB, "test-output/barbara-upsample-mitchell.png");
+	resize_image(barbara, 2, 2, STBIR_FILTER_BOX         , STBIR_EDGE_CLAMP, STBIR_COLORSPACE_SRGB, "tests-output/barbara-upsample-nearest.png");
+	resize_image(barbara, 2, 2, STBIR_FILTER_TRIANGLE    , STBIR_EDGE_CLAMP, STBIR_COLORSPACE_SRGB, "tests-output/barbara-upsample-bilinear.png");
+	resize_image(barbara, 2, 2, STBIR_FILTER_CUBICBSPLINE, STBIR_EDGE_CLAMP, STBIR_COLORSPACE_SRGB, "tests-output/barbara-upsample-bicubic.png");
+	resize_image(barbara, 2, 2, STBIR_FILTER_CATMULLROM  , STBIR_EDGE_CLAMP, STBIR_COLORSPACE_SRGB, "tests-output/barbara-upsample-catmullrom.png");
+	resize_image(barbara, 2, 2, STBIR_FILTER_MITCHELL    , STBIR_EDGE_CLAMP, STBIR_COLORSPACE_SRGB, "tests-output/barbara-upsample-mitchell.png");
 
-	resize_image(barbara, 0.5f, 0.5f, STBIR_FILTER_BOX         , STBIR_EDGE_CLAMP, STBIR_COLORSPACE_SRGB, "test-output/barbara-downsample-nearest.png");
-	resize_image(barbara, 0.5f, 0.5f, STBIR_FILTER_TRIANGLE    , STBIR_EDGE_CLAMP, STBIR_COLORSPACE_SRGB, "test-output/barbara-downsample-bilinear.png");
-	resize_image(barbara, 0.5f, 0.5f, STBIR_FILTER_CUBICBSPLINE, STBIR_EDGE_CLAMP, STBIR_COLORSPACE_SRGB, "test-output/barbara-downsample-bicubic.png");
-	resize_image(barbara, 0.5f, 0.5f, STBIR_FILTER_CATMULLROM  , STBIR_EDGE_CLAMP, STBIR_COLORSPACE_SRGB, "test-output/barbara-downsample-catmullrom.png");
-	resize_image(barbara, 0.5f, 0.5f, STBIR_FILTER_MITCHELL    , STBIR_EDGE_CLAMP, STBIR_COLORSPACE_SRGB, "test-output/barbara-downsample-mitchell.png");
+	resize_image(barbara, 0.5f, 0.5f, STBIR_FILTER_BOX         , STBIR_EDGE_CLAMP, STBIR_COLORSPACE_SRGB, "tests-output/barbara-downsample-nearest.png");
+	resize_image(barbara, 0.5f, 0.5f, STBIR_FILTER_TRIANGLE    , STBIR_EDGE_CLAMP, STBIR_COLORSPACE_SRGB, "tests-output/barbara-downsample-bilinear.png");
+	resize_image(barbara, 0.5f, 0.5f, STBIR_FILTER_CUBICBSPLINE, STBIR_EDGE_CLAMP, STBIR_COLORSPACE_SRGB, "tests-output/barbara-downsample-bicubic.png");
+	resize_image(barbara, 0.5f, 0.5f, STBIR_FILTER_CATMULLROM  , STBIR_EDGE_CLAMP, STBIR_COLORSPACE_SRGB, "tests-output/barbara-downsample-catmullrom.png");
+	resize_image(barbara, 0.5f, 0.5f, STBIR_FILTER_MITCHELL    , STBIR_EDGE_CLAMP, STBIR_COLORSPACE_SRGB, "tests-output/barbara-downsample-mitchell.png");
 
 	{for (i = 10; i < 100; i++)
 	{
 		char outname[200];
-		sprintf(outname, "test-output/barbara-width-%d.jpg", i);
+		sprintf(outname, "tests-output/barbara-width-%d.jpg", i);
 		resize_image(barbara, (float)i / 100, 1, STBIR_FILTER_CATMULLROM, STBIR_EDGE_CLAMP, STBIR_COLORSPACE_SRGB, outname);
 	}}
 
 	{for (i = 110; i < 500; i += 10)
 	{
 		char outname[200];
-		sprintf(outname, "test-output/barbara-width-%d.jpg", i);
+		sprintf(outname, "tests-output/barbara-width-%d.jpg", i);
 		resize_image(barbara, (float)i / 100, 1, STBIR_FILTER_CATMULLROM, STBIR_EDGE_CLAMP, STBIR_COLORSPACE_SRGB, outname);
 	}}
 
 	{for (i = 10; i < 100; i++)
 	{
 		char outname[200];
-		sprintf(outname, "test-output/barbara-height-%d.jpg", i);
+		sprintf(outname, "tests-output/barbara-height-%d.jpg", i);
 		resize_image(barbara, 1, (float)i / 100, STBIR_FILTER_CATMULLROM, STBIR_EDGE_CLAMP, STBIR_COLORSPACE_SRGB, outname);
 	}}
 
 	{for (i = 110; i < 500; i += 10)
 	{
 		char outname[200];
-		sprintf(outname, "test-output/barbara-height-%d.jpg", i);
+		sprintf(outname, "tests-output/barbara-height-%d.jpg", i);
 		resize_image(barbara, 1, (float)i / 100, STBIR_FILTER_CATMULLROM, STBIR_EDGE_CLAMP, STBIR_COLORSPACE_SRGB, outname);
 	}}
 
 	{for (i = 50; i < 200; i += 10)
 	{
 		char outname[200];
-		sprintf(outname, "test-output/barbara-width-height-%d.jpg", i);
+		sprintf(outname, "tests-output/barbara-width-height-%d.jpg", i);
 		resize_image(barbara, 100 / (float)i, (float)i / 100, STBIR_FILTER_CATMULLROM, STBIR_EDGE_CLAMP, STBIR_COLORSPACE_SRGB, outname);
 	}}
 
@@ -1102,17 +1102,17 @@ void test_suite(int argc, char **argv)
 	test_float(barbara, 2.0, 0.5, STBIR_TYPE_FLOAT, STBIR_COLORSPACE_LINEAR);
 
 	// Edge behavior tests
-	resize_image("hgradient.png", 2, 2, STBIR_FILTER_CATMULLROM, STBIR_EDGE_CLAMP, STBIR_COLORSPACE_LINEAR, "test-output/hgradient-clamp.png");
-	resize_image("hgradient.png", 2, 2, STBIR_FILTER_CATMULLROM, STBIR_EDGE_WRAP, STBIR_COLORSPACE_LINEAR, "test-output/hgradient-wrap.png");
+	resize_image("hgradient.png", 2, 2, STBIR_FILTER_CATMULLROM, STBIR_EDGE_CLAMP, STBIR_COLORSPACE_LINEAR, "tests-output/hgradient-clamp.png");
+	resize_image("hgradient.png", 2, 2, STBIR_FILTER_CATMULLROM, STBIR_EDGE_WRAP, STBIR_COLORSPACE_LINEAR, "tests-output/hgradient-wrap.png");
 
-	resize_image("vgradient.png", 2, 2, STBIR_FILTER_CATMULLROM, STBIR_EDGE_CLAMP, STBIR_COLORSPACE_LINEAR, "test-output/vgradient-clamp.png");
-	resize_image("vgradient.png", 2, 2, STBIR_FILTER_CATMULLROM, STBIR_EDGE_WRAP, STBIR_COLORSPACE_LINEAR, "test-output/vgradient-wrap.png");
+	resize_image("vgradient.png", 2, 2, STBIR_FILTER_CATMULLROM, STBIR_EDGE_CLAMP, STBIR_COLORSPACE_LINEAR, "tests-output/vgradient-clamp.png");
+	resize_image("vgradient.png", 2, 2, STBIR_FILTER_CATMULLROM, STBIR_EDGE_WRAP, STBIR_COLORSPACE_LINEAR, "tests-output/vgradient-wrap.png");
 
-	resize_image("1px-border.png", 2, 2, STBIR_FILTER_CATMULLROM, STBIR_EDGE_REFLECT, STBIR_COLORSPACE_LINEAR, "test-output/1px-border-reflect.png");
-	resize_image("1px-border.png", 2, 2, STBIR_FILTER_CATMULLROM, STBIR_EDGE_CLAMP, STBIR_COLORSPACE_LINEAR, "test-output/1px-border-clamp.png");
+	resize_image("1px-border.png", 2, 2, STBIR_FILTER_CATMULLROM, STBIR_EDGE_REFLECT, STBIR_COLORSPACE_LINEAR, "tests-output/1px-border-reflect.png");
+	resize_image("1px-border.png", 2, 2, STBIR_FILTER_CATMULLROM, STBIR_EDGE_CLAMP, STBIR_COLORSPACE_LINEAR, "tests-output/1px-border-clamp.png");
 
 	// sRGB tests
-	resize_image("gamma_colors.jpg", .5f, .5f, STBIR_FILTER_CATMULLROM, STBIR_EDGE_REFLECT, STBIR_COLORSPACE_SRGB, "test-output/gamma_colors.jpg");
-	resize_image("gamma_2.2.jpg", .5f, .5f, STBIR_FILTER_CATMULLROM, STBIR_EDGE_REFLECT, STBIR_COLORSPACE_SRGB, "test-output/gamma_2.2.jpg");
-	resize_image("gamma_dalai_lama_gray.jpg", .5f, .5f, STBIR_FILTER_CATMULLROM, STBIR_EDGE_REFLECT, STBIR_COLORSPACE_SRGB, "test-output/gamma_dalai_lama_gray.jpg");
+	resize_image("gamma_colors.jpg", .5f, .5f, STBIR_FILTER_CATMULLROM, STBIR_EDGE_REFLECT, STBIR_COLORSPACE_SRGB, "tests-output/gamma_colors.jpg");
+	resize_image("gamma_2.2.jpg", .5f, .5f, STBIR_FILTER_CATMULLROM, STBIR_EDGE_REFLECT, STBIR_COLORSPACE_SRGB, "tests-output/gamma_2.2.jpg");
+	resize_image("gamma_dalai_lama_gray.jpg", .5f, .5f, STBIR_FILTER_CATMULLROM, STBIR_EDGE_REFLECT, STBIR_COLORSPACE_SRGB, "tests-output/gamma_dalai_lama_gray.jpg");
 }

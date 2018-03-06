@@ -6940,7 +6940,7 @@ static void stb__dirtree_scandir(char *path, time_t last_time, stb_dirtree *acti
 {
    // this is dumb depth first; theoretically it might be faster
    // to fully traverse each directory before visiting its children,
-   // but it's complicated and didn't seem like a gain in the test app
+   // but it's complicated and didn't seem like a gain in the tests app
 
    int n;
 
@@ -7541,7 +7541,7 @@ STB_EXTERN void ** stb_ps_fastlist(stb_ps *ps, int *count);
 //  result:
 //     returns a list, *count is the length of that list,
 //     but some entries of the list may be invalid;
-//     test with 'stb_ps_fastlist_valid(x)'
+//     tests with 'stb_ps_fastlist_valid(x)'
 
 #define stb_ps_fastlist_valid(x)   ((stb_uinta) (x) > 1)
 
@@ -10007,7 +10007,7 @@ void stb__introspect(char *path, char *file, stb_info_struct *compiled)
       
       {
          // find any file that contains an introspection command and is newer
-         // if needs_building is already true, we don't need to do this test,
+         // if needs_building is already true, we don't need to do this tests,
          // but we still need these arrays, so go ahead and get them
          char **all[3];
          all[0] = stb_readdir_files_mask(path, "*.h");

@@ -3,8 +3,12 @@
 #include <sstream>
 #include <string>
 
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+
 #include "Window.h"
 #include "gl_debug.h"
+#include "VertexArrayBuffer.h"
 
 bool initialize_opengl()
 {
@@ -101,26 +105,13 @@ int main()
          3, 1, 2
     };
 
-    GLuint vao;
-    glGenVertexArrays(1, &vao);
-    glBindVertexArray(vao);
+    GLuint vao = create_array_buffer();
+    GLuint vbo = create_vertex_buffer(positions);
+    GLuint ibo = create_index_buffer(indices);
+    bind_to_vao(vao, vbo, ibo);
 
 
-    GLuint vbo;
-    GLCALL(glGenBuffers(1, &vbo));
-    GLCALL(glBindBuffer(GL_ARRAY_BUFFER, vbo));
-    GLCALL(glBufferData(GL_ARRAY_BUFFER, 12 * sizeof(GLfloat), positions, GL_STATIC_DRAW));
-
-    GLuint ibo;
-    GLCALL(glGenBuffers(1, &ibo));
-    GLCALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo));
-    GLCALL(glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6 * sizeof(GLuint), &indices[0], GL_STATIC_DRAW));
-
-    GLCALL(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 3, 0));
-    GLCALL(glEnableVertexAttribArray(0));
-
-
-    // Shaders
+    // SHADERS
     ShaderSources sources = load_shaders("../res/shaders/basic.glsl");
 
     const char* vertex_source = sources.vertex.c_str();
@@ -131,7 +122,6 @@ int main()
 //    std::cout << vertex_source << std::endl;
 //    std::cout << "--------------------------\nFragment shader" << std::endl;
 //    std::cout << fragment_source << std::endl;
-
 
     GLuint vertexID;
     GLCALL(vertexID = glCreateShader(GL_VERTEX_SHADER));
@@ -162,7 +152,7 @@ int main()
 
     GLCALL(glDeleteShader(vertexID));
     GLCALL(glDeleteShader(fragmentID));
-
+    // END SHADERS
 
     while (!glfwWindowShouldClose(window))
     {

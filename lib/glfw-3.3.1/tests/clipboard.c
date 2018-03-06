@@ -1,5 +1,5 @@
 //========================================================================
-// Clipboard test program
+// Clipboard tests program
 // Copyright (c) Camilla Löwy <elmindreda@glfw.org>
 //
 // This software is provided 'as-is', without any express or implied
@@ -23,7 +23,7 @@
 //
 //========================================================================
 //
-// This program is used to test the clipboard functionality.
+// This program is used to tests the clipboard functionality.
 //
 //========================================================================
 
