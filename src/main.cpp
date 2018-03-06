@@ -20,6 +20,17 @@ bool initialize_opengl()
 }
 
 
+void draw(GLuint program, GLuint vao)
+{
+    GLCALL(glClearColor(0.2, 0.3, 0.8, 1.0));
+    GLCALL(glClear(GL_COLOR_BUFFER_BIT));
+
+    GLCALL(glUseProgram(program));
+    GLCALL(glBindVertexArray(vao));
+    GLCALL(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0));
+}
+
+
 int main()
 {
 
@@ -61,25 +72,17 @@ int main()
     };
 
     GLuint vao = create_array_buffer();
-    GLuint vbo = create_vertex_buffer(positions);
-    GLuint ibo = create_index_buffer(indices);
-    bind_to_vao(vao, vbo, ibo);
+    GLuint vbo = create_vertex_buffer(positions, 12);
+    GLuint ibo = create_index_buffer(indices, 6);
+    bind_to_vao(vao, vbo, ibo, 5);
 
-
-    // SHADERS
     GLuint programID = create_shader_program("../res/shaders/basic.glsl");
-    // END SHADERS
 
     while (!glfwWindowShouldClose(window))
     {
         double start = glfwGetTime();
 
-        GLCALL(glClearColor(0.2, 0.3, 0.8, 1.0));
-        GLCALL(glClear(GL_COLOR_BUFFER_BIT));
-
-        GLCALL(glUseProgram(programID));
-        GLCALL(glBindVertexArray(vao));
-        GLCALL(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0));
+        draw(programID, vao);
 
         glfwSwapBuffers(window);
         glfwPollEvents();

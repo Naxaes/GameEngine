@@ -3,6 +3,114 @@ Should we create managers for everything that can contain more than one object?
 
 
 
+---- START: ORDER OF EXECUTION ----
+
+If the list numbers are the same, then execution order doesn't matter.
+
+
+-- SHADER PROGRAM --
+
+Requirements:
+    1. Must exist a valid OpenGL context.
+
+1. Create shaders (Vertex and fragment as minimum):
+    1. Create shader handle.  (glCreateShader)
+    2. Add shader source.     (glShaderSource)
+    3. Compile the shader.    (glCompileShader)
+    4. Check compile status.
+
+2. Create program:
+    1. Create program handle.       (glCreateProgram)
+    2. Attach all shaders.          (glAttachShader)
+    3. Bind attributes to indices.  (glBindAttribLocation)
+    4. Link the program.            (glLinkProgram)
+    5. Check link status.
+    6. Validate the program.        (glValidateProgram)
+    7. Check validation status.
+
+-- SHADER PROGRAM END --
+
+
+-- VAO, VBO and IBO --
+
+Requirements:
+    1. Must exist a valid OpenGL context.
+
+1. Create VAO:
+    1. Create VAO handle. (glGenVertexArrays)
+
+1. Create VBO and/or IBO:
+    1. Create handle.     (glGenBuffers)
+    2. Bind the buffer.   (glBindBuffer)
+    3. Add buffer data.   (glBufferData)
+
+2. Connect VBOs and IBO to VAO.
+    1. Bind the VAO.        (glBindVertexArray)
+    2. Bind the VBO.        (glBindBuffer)
+    2. Bind the IBO.        (glBindBuffer)
+    3. Enable VAO index.    (glEnableVertexAttribArray)
+    3. Specify VBO layout.  (glVertexAttribPointer)
+
+-- VAO, VBO and IBO END --
+
+
+-- DRAW (with index buffers) --
+
+Requirements:
+    1. Must exist a valid OpenGL context.
+    2. Must have a valid shader program.
+    3. Must have a valid VAO.
+
+Version 1:
+    1. Bind program.    (glUseProgram)
+    2. Bind VAO.        (glBindVertexArray)
+    3. Draw call.       (glDrawElements)
+
+Version 2:
+    1. Bind program.        (glUseProgram)
+    2. Bind VBO.            (glBindBuffer)
+    2. Bind IBO.            (glBindBuffer)
+    3. Enable VAO index.    (glEnableVertexAttribArray)
+    3. Specify VBO layout.  (glVertexAttribPointer)
+    3. Draw call.           (glDrawElements)
+
+-- DRAW END --
+
+
+---- END: ORDER OF EXECUTION ----
+
+
+
+
+---- CREATE VAO ----
+
+To create a VBO we require:
+    1. The array of elements.
+    2. The data type of the elements.
+    3. The element count.
+    4. The mode.
+    5. (Maybe) The number of VBOs to create.
+
+To create an IBO we require:
+    1. The array of elements.
+    2. The data type of the elements.
+    3. The element count.
+    4. The mode.
+    5. (Maybe) The number of VBOs to create.
+
+To create a VAO we require:
+    1. The VBOs.
+    2. The layout of each VBO.
+    3. The IBO.
+
+The layout of a VBO consists of:
+    1. The attribute index.
+    2. Element count per vertex.
+    3. The data type (both the type and the integer value that represents the type).
+    4. If it's normalized.
+    5. The stride.
+    6. The offset.
+
 
 
 ---- IMPORTANT INITIALIZATION ----
