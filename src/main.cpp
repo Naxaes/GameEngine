@@ -33,29 +33,15 @@ void draw(GLuint program, GLuint vao)
 
 int main()
 {
-
-    if (!initialize_glfw())
-    {
-        std::cerr << "Failed to initialize GLFW." << std::endl;
-        return -1;
-    }
-    else
-    {
-        std::cout << "[Initialization] GLFW Version: " << glfwGetVersionString()  << std::endl;
-    }
+    ASSERT(initialize_glfw(), "Failed to initialize GLFW.");
+    std::cout << "[Initialization] GLFW Version: " << glfwGetVersionString()  << std::endl;
 
     GLFWwindow* window = create_window(420, 420, "OpenGL Project");
 
-    if (!initialize_opengl())
-    {
-        std::cerr << "Failed to initialize OpenGL context" << std::endl;
-        return -1;
-    }
-    else
-    {
-        std::cout << "[Initialization] OpenGL Version: " << glGetString(GL_VERSION) << std::endl;
-    }
+    ASSERT(window, "Failed to create GLFW window.");
 
+    ASSERT(initialize_opengl(), "Failed to initialize OpenGL context.");
+    std::cout << "[Initialization] OpenGL Version: " << glGetString(GL_VERSION) << std::endl;
 
 
     // VBO and IBO.

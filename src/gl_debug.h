@@ -10,7 +10,7 @@
 #define GLCALL(x) clear_errors(); x; print_errors(#x, __FILE__, __LINE__)
 #define check_shader_status(shaderID, status) _check_shader_status(shaderID, status, #status)
 #define check_program_status(programID, status) _check_program_status(programID, status, #status)
-#define ASSERT(condition, message) _assertion(condition, message, #condition, __FILE__, __LINE__)
+#define ASSERT(condition, message) _assertion((bool)(condition), message, #condition, __FILE__, __LINE__)
 
 const char* error_to_string(GLuint error);
 void clear_errors();

@@ -2,6 +2,23 @@
 Should we create managers for everything that can contain more than one object?
 
 
+---- NAMING ----
+
+1. Name functions with the broader scope first and then specify. This allows for better autocomplete searching.
+    Example:
+        window_create()
+        window_callback_key_add()
+        window_callback_key_get()
+        window_callback_mouse_add()
+        window_mouse_button_get()
+        window_mouse_button_set()
+
+    All these are easily found and similar functionality are grouped together.
+
+
+---- NAMING END ----
+
+
 
 ---- START: ORDER OF EXECUTION ----
 

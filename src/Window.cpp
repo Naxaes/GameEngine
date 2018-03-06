@@ -122,10 +122,7 @@ GLFWwindow* create_window(unsigned short width, unsigned short height, const cha
 
 
     if (!window)
-    {
-        std::cerr << "Failed to create GLFW window." << std::endl;
         return nullptr;
-    }
 
     glfwSetWindowSizeLimits(window, 100, 100, GLFW_DONT_CARE, GLFW_DONT_CARE);
     glfwSetWindowAspectRatio(window, 16, 9);
