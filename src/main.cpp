@@ -43,6 +43,18 @@ void draw(GLuint program, World world)
 
     GLCALL(GLint transformation_location = glGetUniformLocation(program, "transformation"));
 
+    glm::mat4 view = glm::lookAt(
+            glm::vec3(1.2f, 1.2f, 1.2f),
+            glm::vec3(0.0f, 0.0f, 0.0f),
+            glm::vec3(0.0f, 0.0f, 1.0f)
+    );
+    GLCALL(GLint view_location = glGetUniformLocation(program, "view"));
+    GLCALL(glUniformMatrix4fv(view_location, 1, GL_FALSE, glm::value_ptr(view)));
+
+    glm::mat4 projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 1.0f, 10.0f);
+    GLCALL(GLint projection_location = glGetUniformLocation(program, "projection"));
+    GLCALL(glUniformMatrix4fv(projection_location, 1, GL_FALSE, glm::value_ptr(projection)));
+
     for (unsigned int entityID = 0; entityID < world.entity_count; entityID++)
     {
         Graphics graphics = world.entity_graphics[entityID];
