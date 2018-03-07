@@ -28,7 +28,6 @@ enum class ShaderType
 
 ShaderSources load_shaders(const char* filepath)
 {
-
     std::ifstream stream(filepath);
 
     ShaderType type = ShaderType::NONE;
