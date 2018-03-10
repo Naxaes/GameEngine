@@ -1,3 +1,6 @@
+#include "test.h"
+#ifndef MAIN
+
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -18,6 +21,55 @@
 #include "Loader.h"
 #include "Entity.h"
 
+
+GLint transformation_location = 0;
+
+
+class DisplacementComponent : public Component
+{
+public:
+
+    glm::vec3 location;
+    glm::vec3 rotation;
+    glm::vec3 scale;
+
+    DisplacementComponent(const Entity& entity, glm::vec3 location, glm::vec3 rotation, glm::vec3 scale) :
+            Component(entity), location(location), rotation(rotation), scale(scale) {}
+
+    ~DisplacementComponent() = default;
+};
+
+class GraphicComponent : public Component
+{
+public:
+
+    GLuint model, texture, vertex_count;
+    DisplacementComponent* displacement;
+
+    GraphicComponent(const Entity& entity, GLuint model, GLuint texture, GLuint vertex_count) :
+            Component(entity), model(model), texture(texture), vertex_count(vertex_count)
+    {
+        displacement = &entity.get_component<DisplacementComponent>();
+    }
+
+    ~GraphicComponent() = default;
+
+    void update()
+    {
+        glm::mat4 trans = glm::mat4(1.0f);
+        trans = glm::translate(trans, displacement->location);
+        trans = glm::rotate(trans, glm::radians(displacement->rotation.z * 360.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+
+        GLCALL(glUniformMatrix4fv(transformation_location, 1, GL_FALSE, glm::value_ptr(trans)));
+
+        GLCALL(glBindVertexArray(model));
+        GLCALL(glDrawElements(GL_TRIANGLES, vertex_count, GL_UNSIGNED_INT, 0));
+    }
+};
+
+
+
+
 bool initialize_opengl()
 {
     // Load all OpenGL functions using the glfw loader function
@@ -34,14 +86,14 @@ bool initialize_opengl()
 }
 
 
-void draw(GLuint program, World world)
+void draw(GLuint program, Entity entity)
 {
     GLCALL(glClearColor(0.2, 0.3, 0.8, 1.0));
     GLCALL(glClear(GL_COLOR_BUFFER_BIT));
 
     GLCALL(glUseProgram(program));
 
-    GLCALL(GLint transformation_location = glGetUniformLocation(program, "transformation"));
+    GLCALL(transformation_location = glGetUniformLocation(program, "transformation"));
 
     glm::mat4 view = glm::lookAt(
             glm::vec3(1.2f, 1.2f, 1.2f),
@@ -55,20 +107,8 @@ void draw(GLuint program, World world)
     GLCALL(GLint projection_location = glGetUniformLocation(program, "projection"));
     GLCALL(glUniformMatrix4fv(projection_location, 1, GL_FALSE, glm::value_ptr(projection)));
 
-    for (unsigned int entityID = 0; entityID < world.entity_count; entityID++)
-    {
-        Graphics graphics = world.entity_graphics[entityID];
-        Displacement* displacement = graphics.displacement;
 
-        glm::mat4 trans = glm::mat4(1.0f);
-        trans = glm::translate(trans, glm::vec3(displacement->x, displacement->y, displacement->z));
-        trans = glm::rotate(trans, glm::radians(displacement->rz * 360.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-
-        GLCALL(glUniformMatrix4fv(transformation_location, 1, GL_FALSE, glm::value_ptr(trans)));
-
-        GLCALL(glBindVertexArray(graphics.model));
-        GLCALL(glDrawElements(GL_TRIANGLES, graphics.vertex_count, GL_UNSIGNED_INT, 0));
-    }
+    entity.update();
 
 }
 
@@ -101,25 +141,28 @@ int main()
     GLuint programID = create_shader_program("../res/shaders/basic.glsl");
 
 
-    World world(100);
+    Entity entity;
 
-    Displacement displacement = {0, 0, 0, 0, 0, 0, 1, 1, 1};
-    Movement movement = {0};
-    Graphics graphics = {&displacement, vao, (unsigned int) data.indices.size(), 0};
+    glm::vec3 location{0, 0, 0};
+    glm::vec3 rotation{0, 0, 0};
+    glm::vec3 scale{1.0f, 1.0f, 1.0f};
 
-    world.entity_create(displacement, movement, graphics);
+    entity.add_component<DisplacementComponent>(location, rotation, scale);
+    entity.add_component<GraphicComponent>(vao, 0, (unsigned int) data.indices.size());
+
 
     while (!glfwWindowShouldClose(window))
     {
         double start = glfwGetTime();
 
-        draw(programID, world);
+        draw(programID, entity);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
 
-        displacement.x = (float)std::sin(start);
-        displacement.rz = (float)std::cos(start);
+        DisplacementComponent& displacement = entity.get_component<DisplacementComponent>();
+        displacement.location.x = (float)std::sin(start);
+        displacement.rotation.z = (float)std::cos(start);
 
         std::string title = "Milliseconds per frame: " + std::to_string(glfwGetTime() - start).substr(0, 5);
         glfwSetWindowTitle(window, title.c_str());
@@ -132,3 +175,5 @@ int main()
 
 
 }
+
+#endif
