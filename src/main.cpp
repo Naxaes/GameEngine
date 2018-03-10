@@ -1,5 +1,9 @@
-#include "test.h"
-#ifndef MAIN
+#include "../tests/EntityTest.h"
+
+
+#if !RUN_ENTITY_TEST
+
+
 
 #include <iostream>
 #include <fstream>
@@ -10,6 +14,7 @@
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
 
@@ -56,11 +61,14 @@ public:
 
     void update()
     {
-        glm::mat4 trans = glm::mat4(1.0f);
-        trans = glm::translate(trans, displacement->location);
-        trans = glm::rotate(trans, glm::radians(displacement->rotation.z * 360.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+        glm::mat4 identity = glm::mat4(1.0f);
+        glm::mat4 translated = glm::translate(identity, displacement->location);
+        glm::mat4 rotated = glm::rotate(identity, glm::radians(displacement->rotation.z * 360.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+        glm::mat4 scaled = glm::scale(displacement->scale);
 
-        GLCALL(glUniformMatrix4fv(transformation_location, 1, GL_FALSE, glm::value_ptr(trans)));
+        glm::mat4 transformation_matrix = translated * rotated * scaled;
+
+        GLCALL(glUniformMatrix4fv(transformation_location, 1, GL_FALSE, glm::value_ptr(transformation_matrix)));
 
         GLCALL(glBindVertexArray(model));
         GLCALL(glDrawElements(GL_TRIANGLES, vertex_count, GL_UNSIGNED_INT, 0));
@@ -88,8 +96,14 @@ bool initialize_opengl()
 
 void draw(GLuint program, Entity entity)
 {
+    GLCALL(glEnable(GL_DEPTH_TEST));
+    GLCALL(glEnable(GL_CULL_FACE));   // Cannot do single call with bitwise operation. Don't know why.
+
     GLCALL(glClearColor(0.2, 0.3, 0.8, 1.0));
-    GLCALL(glClear(GL_COLOR_BUFFER_BIT));
+    GLCALL(glCullFace(GL_BACK));
+
+    GLCALL(glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT));
+
 
     GLCALL(glUseProgram(program));
 
@@ -131,7 +145,7 @@ int main()
 
 
 
-    OBJData data = load_obj_file("../res/models/cube.obj");
+    OBJData data = load_obj_file("../res/models/dragon.obj");
 
     GLuint vao = create_array_buffer();
     GLuint vbo = create_vertex_buffer(&data.positions[0], (unsigned int) data.positions.size());
@@ -145,7 +159,7 @@ int main()
 
     glm::vec3 location{0, 0, 0};
     glm::vec3 rotation{0, 0, 0};
-    glm::vec3 scale{1.0f, 1.0f, 1.0f};
+    glm::vec3 scale{0.1f, 0.1f, 0.1f};
 
     entity.add_component<DisplacementComponent>(location, rotation, scale);
     entity.add_component<GraphicComponent>(vao, 0, (unsigned int) data.indices.size());

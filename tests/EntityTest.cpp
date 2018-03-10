@@ -2,17 +2,16 @@
 // Created by Ted Klein Bergman on 3/10/18.
 //
 
-#ifndef OPENGLPROJECT_TEST_H
-#define OPENGLPROJECT_TEST_H
+#include "EntityTest.h"
+#if RUN_ENTITY_TEST
 
-#if 0
-#define MAIN main
 
 #include <iostream>
 #include <vector>
 #include <array>
 #include <bitset>
 #include <cassert>
+
 
 
 constexpr unsigned int MAX_COMPONENTS = 32;
@@ -115,5 +114,7 @@ int main()
     return 0;
 }
 
+
+
+
 #endif
-#endif //OPENGLPROJECT_TEST_H
