@@ -1,7 +1,9 @@
 #include "../tests/EntityTest.h"
+#include "../tests/MatrixTest.h"
+#include "../tests/TemporaryTest.h"
 
 
-#if !RUN_ENTITY_TEST
+#if !RUN_ENTITY_TEST && !RUN_MATRIX_TEST && !RUN_TEMPORARYTEST
 
 
 
@@ -9,6 +11,7 @@
 #include <fstream>
 #include <sstream>
 #include <string>
+
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -21,13 +24,10 @@
 #include "Window.h"
 #include "gl_debug.h"
 #include "debug.h"
-#include "Shader.h"
+#include "Shader2.h"
 #include "VertexArrayBuffer.h"
 #include "Loader.h"
 #include "Entity.h"
-
-
-GLint transformation_location = 0;
 
 
 class DisplacementComponent : public Component
@@ -40,8 +40,29 @@ public:
 
     DisplacementComponent(const Entity& entity, glm::vec3 location, glm::vec3 rotation, glm::vec3 scale) :
             Component(entity), location(location), rotation(rotation), scale(scale) {}
-
     ~DisplacementComponent() = default;
+
+    void update(
+            float x  = 0.0f, float y  = 0.0f, float z  = 0.0f,
+            float rx = 0.0f, float ry = 0.0f, float rz = 0.0f,
+            float sx = 0.0f, float sy = 0.0f, float sz = 0.0f
+    )
+    {
+        if (!x)
+            return;
+
+        location.x += x;
+        location.y += y;
+        location.z += z;
+
+        rotation.x += rx;
+        rotation.y += ry;
+        rotation.z += rz;
+
+        scale.x += sx;
+        scale.y += sy;
+        scale.z += sz;
+    };
 };
 
 class GraphicComponent : public Component
@@ -59,16 +80,16 @@ public:
 
     ~GraphicComponent() = default;
 
-    void update()
+    void update(Shader program)
     {
         glm::mat4 identity = glm::mat4(1.0f);
         glm::mat4 translated = glm::translate(identity, displacement->location);
         glm::mat4 rotated = glm::rotate(identity, glm::radians(displacement->rotation.z * 360.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-        glm::mat4 scaled = glm::scale(displacement->scale);
+        glm::mat4 scaled  = glm::scale(displacement->scale);
 
         glm::mat4 transformation_matrix = translated * rotated * scaled;
 
-        GLCALL(glUniformMatrix4fv(transformation_location, 1, GL_FALSE, glm::value_ptr(transformation_matrix)));
+        program.bind_uniform("transformation", transformation_matrix);
 
         GLCALL(glBindVertexArray(model));
         GLCALL(glDrawElements(GL_TRIANGLES, vertex_count, GL_UNSIGNED_INT, 0));
@@ -93,38 +114,6 @@ bool initialize_opengl()
     return (bool) gladLoadGLLoader((GLADloadproc) glfwGetProcAddress);
 }
 
-
-void draw(GLuint program, Entity entity)
-{
-    GLCALL(glEnable(GL_DEPTH_TEST));
-    GLCALL(glEnable(GL_CULL_FACE));   // Cannot do single call with bitwise operation. Don't know why.
-
-    GLCALL(glClearColor(0.2, 0.3, 0.8, 1.0));
-    GLCALL(glCullFace(GL_BACK));
-
-    GLCALL(glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT));
-
-
-    GLCALL(glUseProgram(program));
-
-    GLCALL(transformation_location = glGetUniformLocation(program, "transformation"));
-
-    glm::mat4 view = glm::lookAt(
-            glm::vec3(1.2f, 1.2f, 1.2f),
-            glm::vec3(0.0f, 0.0f, 0.0f),
-            glm::vec3(0.0f, 0.0f, 1.0f)
-    );
-    GLCALL(GLint view_location = glGetUniformLocation(program, "view"));
-    GLCALL(glUniformMatrix4fv(view_location, 1, GL_FALSE, glm::value_ptr(view)));
-
-    glm::mat4 projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 1.0f, 10.0f);
-    GLCALL(GLint projection_location = glGetUniformLocation(program, "projection"));
-    GLCALL(glUniformMatrix4fv(projection_location, 1, GL_FALSE, glm::value_ptr(projection)));
-
-
-    entity.update();
-
-}
 
 
 int main()
@@ -152,10 +141,17 @@ int main()
     GLuint ibo = create_index_buffer(&data.indices[0], (unsigned int) data.indices.size());
     bind_to_vao(vao, vbo, ibo, 3);
 
-    GLuint programID = create_shader_program("../res/shaders/basic.glsl");
 
+    std::vector<std::string> attributes;
+    std::vector<std::string> uniforms;
+    attributes.push_back("position");
+    uniforms.push_back("transformation");
+    uniforms.push_back("view");
+    uniforms.push_back("projection");
+    Shader program("../res/shaders/basic.glsl", attributes, uniforms);
 
-    Entity entity;
+    ComponentManager manager;
+    Entity entity = manager.create_entity();
 
     glm::vec3 location{0, 0, 0};
     glm::vec3 rotation{0, 0, 0};
@@ -165,11 +161,33 @@ int main()
     entity.add_component<GraphicComponent>(vao, 0, (unsigned int) data.indices.size());
 
 
+    GLCALL(glEnable(GL_DEPTH_TEST));
+    GLCALL(glEnable(GL_CULL_FACE));   // Cannot do single call with bitwise operation. Don't know why.
+
+    GLCALL(glClearColor(0.2, 0.3, 0.8, 1.0));
+    GLCALL(glCullFace(GL_BACK));
+
+    glm::mat4 view = glm::lookAt(
+            glm::vec3(0.0f, 0.0f,  -2.0f),
+            glm::vec3(0.0f, 0.0f,   0.0f),
+            glm::vec3(0.0f, 1.0f,   0.0f)
+    );
+    glm::mat4 projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 1.0f, 10.0f);
+
+    program.bind();  // TODO(ted): Must bind before binding uniform. Make it throw better error messages if it's not.
+    program.bind_uniform("view", view);
+    program.bind_uniform("projection", projection);
+
     while (!glfwWindowShouldClose(window))
     {
         double start = glfwGetTime();
 
-        draw(programID, entity);
+        GLCALL(glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT));
+
+        program.bind();
+
+        manager.update<DisplacementComponent>();
+        manager.update<GraphicComponent>(program);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
@@ -181,7 +199,6 @@ int main()
         std::string title = "Milliseconds per frame: " + std::to_string(glfwGetTime() - start).substr(0, 5);
         glfwSetWindowTitle(window, title.c_str());
     }
-
 
     terminate(window);
 

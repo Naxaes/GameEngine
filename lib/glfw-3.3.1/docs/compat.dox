@@ -25,7 +25,7 @@ conventions have been developed that regulate behavior outside the scope of the
 X11 API; most importantly the
 [Inter-Client Communication Conventions Manual](http://www.tronche.com/gui/x/icccm/)
 (ICCCM) and
-[Extended Window Manager Hints](http://standards.freedesktop.org/wm-spec/wm-spec-latest.html)
+[Extended Window ComponentManager Hints](http://standards.freedesktop.org/wm-spec/wm-spec-latest.html)
 (EWMH) standards.
 
 GLFW uses the `_MOTIF_WM_HINTS` window property to support borderless windows.
