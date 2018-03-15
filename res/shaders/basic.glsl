@@ -23,7 +23,9 @@ in vec3 pass_position;
 
 out vec4 color;
 
+uniform float time;
+
 void main()
 {
-    color = vec4(pass_position, 1.0);
+    color = vec4(pass_position * sin(time), 1.0f);
 }

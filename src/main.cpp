@@ -24,7 +24,7 @@
 #include "Window.h"
 #include "gl_debug.h"
 #include "debug.h"
-#include "Shader2.h"
+#include "Shader.h"
 #include "VertexArrayBuffer.h"
 #include "Loader.h"
 #include "Entity.h"
@@ -69,11 +69,12 @@ class GraphicComponent : public Component
 {
 public:
 
-    GLuint model, texture, vertex_count;
+    VertexArray vao;
+    GLuint texture, vertex_count;
     DisplacementComponent* displacement;
 
-    GraphicComponent(const Entity& entity, GLuint model, GLuint texture, GLuint vertex_count) :
-            Component(entity), model(model), texture(texture), vertex_count(vertex_count)
+    GraphicComponent(const Entity& entity, VertexArray vao, GLuint texture, GLuint vertex_count) :
+            Component(entity), vao(vao), texture(texture), vertex_count(vertex_count)
     {
         displacement = &entity.get_component<DisplacementComponent>();
     }
@@ -91,7 +92,7 @@ public:
 
         program.bind_uniform("transformation", transformation_matrix);
 
-        GLCALL(glBindVertexArray(model));
+        vao.bind();
         GLCALL(glDrawElements(GL_TRIANGLES, vertex_count, GL_UNSIGNED_INT, 0));
     }
 };
@@ -136,10 +137,21 @@ int main()
 
     OBJData data = load_obj_file("../res/models/dragon.obj");
 
-    GLuint vao = create_array_buffer();
-    GLuint vbo = create_vertex_buffer(&data.positions[0], (unsigned int) data.positions.size());
-    GLuint ibo = create_index_buffer(&data.indices[0], (unsigned int) data.indices.size());
-    bind_to_vao(vao, vbo, ibo, 3);
+//    GLuint vao = create_array_buffer();
+//    GLuint vbo = create_vertex_buffer(&data.positions[0], (unsigned int) data.positions.size());
+//    GLuint ibo = create_index_buffer(&data.indices[0], (unsigned int) data.indices.size());
+//    bind_to_vao(vao, vbo, ibo, 3);
+
+
+    VertexArray  vao2;
+    VertexBuffer<GLfloat> vbo2(&data.positions[0], (unsigned int) data.positions.size());
+    IndexBuffer  ibo2(&data.indices[0], (unsigned int) data.indices.size());
+
+    VertexBufferLayout layout;
+    layout.push<GLfloat>(3);
+
+    vao2.add_buffer<GLfloat>(vbo2, ibo2, layout);
+
 
 
     std::vector<std::string> attributes;
@@ -148,6 +160,7 @@ int main()
     uniforms.push_back("transformation");
     uniforms.push_back("view");
     uniforms.push_back("projection");
+    uniforms.push_back("time");
     Shader program("../res/shaders/basic.glsl", attributes, uniforms);
 
     ComponentManager manager;
@@ -158,7 +171,7 @@ int main()
     glm::vec3 scale{0.1f, 0.1f, 0.1f};
 
     entity.add_component<DisplacementComponent>(location, rotation, scale);
-    entity.add_component<GraphicComponent>(vao, 0, (unsigned int) data.indices.size());
+    entity.add_component<GraphicComponent>(vao2, 0, (unsigned int) data.indices.size());
 
 
     GLCALL(glEnable(GL_DEPTH_TEST));
@@ -185,6 +198,7 @@ int main()
         GLCALL(glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT));
 
         program.bind();
+        program.bind_uniform("time", (float)start);
 
         manager.update<DisplacementComponent>();
         manager.update<GraphicComponent>(program);

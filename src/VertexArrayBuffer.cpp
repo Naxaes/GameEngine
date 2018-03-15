@@ -58,3 +58,36 @@ void bind_to_vao(GLuint vao, GLuint vbo, GLuint ibo, unsigned char count_per_ver
     GLCALL(glEnableVertexAttribArray(0));
     GLCALL(glVertexAttribPointer(0, count_per_vertex, GL_FLOAT, GL_FALSE, count_per_vertex * sizeof(GLfloat), 0));
 }
+
+
+
+
+
+
+
+
+
+
+template <>
+void VertexBufferLayout::push<GLfloat>(unsigned int count, GLboolean normalized)
+{
+    unsigned int offset = sizeof(GLfloat) * count;
+    elements.emplace_back(count, offset, GL_FLOAT, normalized);
+    stride += offset;
+}
+
+template <>
+void VertexBufferLayout::push<GLuint>(unsigned int count, GLboolean normalized)
+{
+    unsigned int offset = sizeof(GLuint) * count;
+    elements.emplace_back(count, offset, GL_UNSIGNED_INT, normalized);
+    stride += offset;
+}
+
+template <>
+void VertexBufferLayout::push<GLint>(unsigned int count, GLboolean normalized)
+{
+    unsigned int offset = sizeof(GLint) * count;
+    elements.emplace_back(count, offset, GL_INT, normalized);
+    stride += offset;
+}
