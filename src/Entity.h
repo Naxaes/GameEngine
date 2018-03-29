@@ -13,6 +13,7 @@
 
 #include "debug.h"
 
+
 using ComponentArrayID = unsigned int;
 using ComponentID = unsigned int;
 using EntityID = unsigned int;

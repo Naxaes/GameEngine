@@ -1,0 +1,13 @@
+
+**** Vector subtraction ****
+A - B gives vector from B to A.
+
+
+**** Dot product ****
+https://betterexplained.com/articles/vector-calculus-understanding-the-dot-product/
+
+
+
+**** Reflect ****
+reflect(N, I);
+N has to be normalized. The reflection vector always has the same length as the incident vector.

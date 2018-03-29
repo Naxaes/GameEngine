@@ -13,13 +13,11 @@
 
 struct OBJData
 {
-    std::vector<GLfloat> positions;
-    std::vector<GLfloat> texture_coordinates;
-    std::vector<GLfloat> normals;
+    std::vector<GLfloat> data;
     std::vector<unsigned int> indices;
 };
 
-OBJData load_obj_file(const char* path);
+OBJData load_obj_file(const char* path, bool normalize = false);
 
 
 #endif //OPENGLPROJECT_LOADER_H

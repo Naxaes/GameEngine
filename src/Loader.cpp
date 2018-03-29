@@ -124,7 +124,7 @@ std::vector<const char*> split_string(const char* string, const char delimiter)
 }
 
 
-OBJData load_obj_file(const char* path)
+OBJData load_obj_file(const char* path, bool normalize)
 {
     FILE* file = fopen(path, "r");
 
@@ -141,11 +141,14 @@ OBJData load_obj_file(const char* path)
     std::vector<unsigned int> indices;
 
     std::unordered_map<std::string, unsigned int> vertex_index;
-    unsigned int index = 0;
 
+    unsigned long index = 0;
+    unsigned long count = 0;
+    unsigned int  max_line_length = 128;
+    float max_value = 1.0f;
 
-    char line[128];
-    while (fgets(line, 128, file) != nullptr)
+    char line[max_line_length];
+    while (fgets(line, max_line_length, file) != nullptr)
     {
         if (line[0] == 'v')
         {
@@ -153,43 +156,48 @@ OBJData load_obj_file(const char* path)
             {
                 glm::vec2 vertex;
                 int matches = sscanf(line, "vt %f %f\n", &vertex.x, &vertex.y); // NOLINT
-                if (matches != 2)
-                    return {};
+
+                ASSERT(matches == 2, "Couldn't parse file %s.", path);
+
                 texture_coordinates.push_back(vertex);
             }
             else if (line[1] == 'n')
             {
                 glm::vec3 vertex;
                 int matches = sscanf(line, "vn %f %f %f\n", &vertex.x, &vertex.y, &vertex.z); // NOLINT
-                if (matches != 3)
-                    return {};
+
+                ASSERT(matches == 3, "Couldn't parse file %s.", path);
+
                 normals.push_back(vertex);
             }
             else
             {
                 glm::vec3 vertex;
                 int matches = sscanf(line, "v %f %f %f\n", &vertex.x, &vertex.y, &vertex.z); // NOLINT
-                if (matches != 3)
-                    return {};
+
+                ASSERT(matches == 3, "Couldn't parse file %s.", path);
+
+                if (vertex.x > max_value)
+                    max_value = vertex.x;
+                if (vertex.y > max_value)
+                    max_value = vertex.y;
+                if (vertex.z > max_value)
+                    max_value = vertex.z;
+
                 positions.push_back(vertex);
             }
         }
         else if (line[0] == 'f')
         {
-
             unsigned int position_index[3], texture_coordinate_index[3], normal_index[3];
             int matches = sscanf(
-                    line, "f %d/%d/%d %d/%d/%d %d/%d/%d\n",
+                    line, "f %u/%u/%u %u/%u/%u %u/%u/%u\n",
                     &position_index[0], &texture_coordinate_index[0], &normal_index[0],
                     &position_index[1], &texture_coordinate_index[1], &normal_index[1],
                     &position_index[2], &texture_coordinate_index[2], &normal_index[2]
             );
 
-            if (matches != 9)
-            {
-                printf("File can't be read by our simple parser : ( Try exporting with other options\n");
-                return {};
-            }
+            ASSERT(matches == 9, "Couldn't parse file %s.", path);
 
             std::vector<const char *> vertices_data_string = split_string(line, ' ');
             for (unsigned int i = 1; i < 4; i++)
@@ -207,7 +215,7 @@ OBJData load_obj_file(const char* path)
                     positions_indices.push_back(position_index[i-1]);
                     texture_coordinates_indices.push_back(texture_coordinate_index[i-1]);
                     normals_indices.push_back(normal_index[i-1]);
-                    vertex_index[vertex] = index++;
+                    vertex_index[vertex] = static_cast<unsigned int>(index++);
                     indices.push_back(vertex_index[vertex]);
                 }
             }
@@ -215,36 +223,40 @@ OBJData load_obj_file(const char* path)
     }
 
 
+    std::vector<GLfloat> data;
+    data.reserve(positions.size() + texture_coordinates.size() + normals.size());
 
-    std::vector<GLfloat> out_positions;
-    std::vector<GLfloat> out_texture_coordinates;
-    std::vector<GLfloat> out_normals;
+    ASSERT(
+            positions_indices.size() == texture_coordinates_indices.size() &&
+            positions_indices.size() == normals_indices.size() &&
+            normals_indices.size()   == texture_coordinates_indices.size(),
+            "Something is wrong!"
+    );
+    count = positions_indices.size();
 
-    for (unsigned int positions_index : positions_indices)
-    {
-        glm::vec3 position = positions[positions_index - 1];   // -1 since obj-file index starts at 1.
-        out_positions.push_back(position.x);
-        out_positions.push_back(position.y);
-        out_positions.push_back(position.z);
-    }
-    for (unsigned int texture_coordinates_index : texture_coordinates_indices)
-    {
-        glm::vec2 texture_coordinate = texture_coordinates[texture_coordinates_index - 1];  // -1 since obj-file index starts at 1.
-        out_texture_coordinates.push_back(texture_coordinate.x);
-        out_texture_coordinates.push_back(texture_coordinate.y);
-    }
-    for (unsigned int normals_index : normals_indices)
-    {
-        glm::vec3 normal = normals[normals_index - 1];   // -1 since obj-file index starts at 1.
-        out_normals.push_back(normal.x);
-        out_normals.push_back(normal.y);
-        out_normals.push_back(normal.z);
-    }
+    if (!normalize)
+        max_value = 1.0f;
 
+    for (unsigned int i = 0; i < count; i++)
+    {
+        glm::vec3 position = positions[positions_indices[i] - 1];   // -1 since obj-file index starts at 1.
+        data.push_back(position.x / max_value);
+        data.push_back(position.y / max_value);
+        data.push_back(position.z / max_value);
+
+        glm::vec2 texture_coordinate = texture_coordinates[texture_coordinates_indices[i] - 1];  // -1 since obj-file index starts at 1.
+        data.push_back(texture_coordinate.x);
+        data.push_back(texture_coordinate.y);
+
+        glm::vec3 normal = normals[normals_indices[i] - 1];   // -1 since obj-file index starts at 1.
+        data.push_back(normal.x);
+        data.push_back(normal.y);
+        data.push_back(normal.z);
+    }
 
     fclose(file);
 
-    return {out_positions, out_texture_coordinates, out_normals, indices};
+    return {data, indices};
 }
 
 

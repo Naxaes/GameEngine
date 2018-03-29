@@ -10,6 +10,7 @@
 #define check_program_status(programID, status) _check_program_status(programID, status, #status)
 
 #include <string>
+#include <utility>
 #include <vector>
 #include <unordered_map>
 
@@ -27,24 +28,56 @@ struct ShaderSources
     std::string fragment;
 };
 
+
+struct ShaderInfo
+{
+    std::vector<const char*> attributes;
+    std::vector<const char*> uniforms;
+
+    ShaderSources sources;
+
+    bool is_compiled;
+};
+
+
 class Shader
 {
 private:
-    void load(const char* filepath);
-    void compile();
+    using String = const char*;
+    using StringVector = std::vector<String>;
+    using LocationMap  = std::unordered_map<String, GLint>;
+
+    // NOTE(ted): ORDER IMPORTANT! It's the order they're initialized, regardless of the order of the mem-initializers.
+    const StringVector  attributes;
+    const StringVector  uniforms;
+    const ShaderSources sources;
+    const GLuint id;
+    const LocationMap   locations;
+
+    ShaderSources load(const char* filepath);
+    GLuint compile();
+    LocationMap cache_locations();
+
 public:
-    GLuint id;
-    const std::vector<std::string> attributes;
-    const std::vector<std::string> uniforms;
-    ShaderSources sources;
 
-    std::unordered_map<std::string, GLint> locations;
+    Shader(String filepath, StringVector attributes, StringVector uniforms)
+            : attributes(std::move(attributes)),
+              uniforms(std::move(uniforms)),
+              sources(load(filepath)),
+              id(compile()),
+              locations(cache_locations())
+    {}
 
-    Shader(const std::string& filepath, std::vector<std::string> attributes, std::vector<std::string> uniforms);
 
-    void bind();
-    void bind_uniform(const char* location, glm::mat4& matrix, GLboolean normalized=GL_FALSE);
-    void bind_uniform(const char* location, float value);
+    void bind() const;
+    void bind_uniform(String location, glm::mat4& matrix, GLboolean normalized=GL_FALSE) const;
+    void bind_uniform(String location, float v1) const;
+    void bind_uniform(String location, float v1, float v2) const;
+    void bind_uniform(String location, float v1, float v2, float v3) const;
+    void bind_uniform(String location, float v1, float v2, float v3, float v4) const;
+    void bind_uniform(String location, unsigned int value) const;
+    void bind_uniform(String location, int value) const;
+    void bind_texture(GLuint id, unsigned int unit = 0) const;
 };
 
 

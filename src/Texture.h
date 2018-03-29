@@ -14,7 +14,7 @@ private:
 
 
 public:
-    GLuint id;
+    GLuint id{0u};
 
     explicit Texture(const char* filepath);
     ~Texture();
