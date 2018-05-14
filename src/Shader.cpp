@@ -9,6 +9,7 @@
 #include <fstream>
 #include <sstream>
 #include <unordered_map>
+#include <stdexcept>
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -31,11 +32,11 @@ enum class ShaderType
 
 
 
-ShaderSources Shader::load(String filepath)
+ShaderSources Shader::load(const std::string& filepath)
 {
     std::ifstream stream(filepath);
 
-    ASSERT(stream.good(), "Couldn't open file %s.", filepath);
+    ASSERT(stream.good(), "Couldn't open file %s.", filepath.c_str());
 
     ShaderType type = ShaderType::NONE;
     std::stringstream shader_sources[2];
@@ -61,7 +62,7 @@ ShaderSources Shader::load(String filepath)
     return {shader_sources[0].str(), shader_sources[1].str()};
 }
 
-GLuint Shader::compile()
+GLuint Shader::compile(const ShaderSources& sources, const std::vector<std::string>& attributes)
 {
     const char* vertex_source   = sources.vertex.c_str();
     const char* fragment_source = sources.fragment.c_str();
@@ -89,7 +90,7 @@ GLuint Shader::compile()
 
     for (unsigned int i = 0; i < attributes.size(); i++)
     {
-        GLCALL(glBindAttribLocation(programID, i, attributes[i]));
+        GLCALL(glBindAttribLocation(programID, i, attributes[i].c_str()));
     }
 
     GLCALL(glLinkProgram(programID));
@@ -109,13 +110,13 @@ GLuint Shader::compile()
 }
 
 
-std::unordered_map<const char*, GLint> Shader::cache_locations()
+std::unordered_map<std::string, GLint> Shader::cache_locations(GLuint id, const std::vector<std::string>& uniforms)
 {
-    std::unordered_map<const char*, GLint> locations;
+    std::unordered_map<std::string, GLint> locations;
 
-    for (const char* uniform : uniforms)
+    for (const std::string& uniform : uniforms)
     {
-        GLCALL(locations[uniform] = glGetUniformLocation(id, uniform));
+        GLCALL(locations[uniform] = glGetUniformLocation(id, uniform.c_str()));
     }
 
     return locations;
@@ -128,46 +129,81 @@ void Shader::bind() const
     GLCALL(glUseProgram(id));
 }
 
-void Shader::bind_uniform(const char* location, glm::mat4& matrix, GLboolean normalized) const
+void Shader::bind_uniform(const std::string& location, const glm::mat4& matrix, GLboolean normalized) const
 {
     ASSERT(current_shader == id, "Shader %i is not bound!", id);
-    GLCALL(glUniformMatrix4fv(locations.at(location), 1, normalized, glm::value_ptr(matrix)));
+
+    GLint index;
+    try { index = locations.at(location); }
+    catch (const std::out_of_range&) { std::printf("Shader has no uniform %s.", location.c_str()); std::exit(-1); }
+
+    GLCALL(glUniformMatrix4fv(index, 1, normalized, glm::value_ptr(matrix)));
 }
 
-void Shader::bind_uniform(const char* location, float v1) const
+void Shader::bind_uniform(const std::string& location, float v1) const
 {
     ASSERT(current_shader == id, "Shader %i is not bound!", id);
-    GLCALL(glUniform1f(locations.at(location), v1));
+
+    GLint index;
+    try { index = locations.at(location); }
+    catch (const std::out_of_range&) { std::printf("Shader has no uniform %s.", location.c_str()); std::exit(-1); }
+
+    GLCALL(glUniform1f(index, v1));
 }
 
-void Shader::bind_uniform(const char* location, float v1, float v2) const
+void Shader::bind_uniform(const std::string& location, float v1, float v2) const
 {
     ASSERT(current_shader == id, "Shader %i is not bound!", id);
-    GLCALL(glUniform2f(locations.at(location), v1, v2));
+
+    GLint index;
+    try { index = locations.at(location); }
+    catch (const std::out_of_range&) { std::printf("Shader has no uniform %s.", location.c_str()); std::exit(-1); }
+
+    GLCALL(glUniform2f(index, v1, v2));
 }
 
-void Shader::bind_uniform(const char* location, float v1, float v2, float v3) const
+void Shader::bind_uniform(const std::string& location, float v1, float v2, float v3) const
 {
     ASSERT(current_shader == id, "Shader %i is not bound!", id);
-    GLCALL(glUniform3f(locations.at(location), v1, v2, v3));
+
+    GLint index;
+    try { index = locations.at(location); }
+    catch (const std::out_of_range&) { std::printf("Shader has no uniform %s.", location.c_str()); std::exit(-1); }
+
+    GLCALL(glUniform3f(index, v1, v2, v3));
 }
 
-void Shader::bind_uniform(const char* location, float v1, float v2, float v3, float v4) const
+void Shader::bind_uniform(const std::string& location, float v1, float v2, float v3, float v4) const
 {
     ASSERT(current_shader == id, "Shader %i is not bound!", id);
-    GLCALL(glUniform4f(locations.at(location), v1, v2, v3, v4));
+
+    GLint index;
+    try { index = locations.at(location); }
+    catch (const std::out_of_range&) { std::printf("Shader has no uniform %s.", location.c_str()); std::exit(-1); }
+
+    GLCALL(glUniform4f(index, v1, v2, v3, v4));
 }
 
-void Shader::bind_uniform(const char* location, unsigned int value) const
+void Shader::bind_uniform(const std::string& location, unsigned int value) const
 {
     ASSERT(current_shader == id, "Shader %i is not bound!", id);
-    GLCALL(glUniform1ui(locations.at(location), value));
+
+    GLint index;
+    try { index = locations.at(location); }
+    catch (const std::out_of_range&) { std::printf("Shader has no uniform %s.", location.c_str()); std::exit(-1); }
+
+    GLCALL(glUniform1ui(index, value));
 }
 
-void Shader::bind_uniform(const char* location, int value) const
+void Shader::bind_uniform(const std::string& location, int value) const
 {
     ASSERT(current_shader == id, "Shader %i is not bound!", id);
-    GLCALL(glUniform1i(locations.at(location), value));
+
+    GLint index;
+    try { index = locations.at(location); }
+    catch (const std::out_of_range&) { std::printf("Shader has no uniform %s.", location.c_str()); std::exit(-1); }
+
+    GLCALL(glUniform1i(index, value));
 }
 
 void Shader::bind_texture(GLuint texture_id, unsigned int unit) const

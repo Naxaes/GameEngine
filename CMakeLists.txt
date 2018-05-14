@@ -1,19 +1,43 @@
 cmake_minimum_required(VERSION 3.9)
-project(OpenGLProject)
-set(CMAKE_CXX_STANDARD 17)
+project(OpenGLProject)  # Sets the name of the project and stores the name in the PROJECT_NAME variable.
 
+set(CMAKE_CXX_STANDARD 17)  # Sets the C++ version.
 
+# GLOB will generate a list of all files that match the globbing expressions and store it into the variable.
+file(GLOB SOURCE_FILES src/*.cpp)
+file(GLOB TEST_SOURCE_FILES tests/src/*.cpp)
 
-option(GLFW_BUILD_DOCS OFF)
-option(GLFW_BUILD_EXAMPLES OFF)
-option(GLFW_BUILD_TESTS OFF)
 add_subdirectory(lib/glfw-3.3.1)
+add_subdirectory(tests/library/google_test)
+
+include_directories(include)
+include_directories(tests/include)
+include_directories(lib/glfw-3.3.1/include)
+include_directories(lib/glad-c/include/)
+include_directories(lib/stb/)
+include_directories(lib/glm/)
+
+include_directories(tests/library/google_test/googletest/include)
+include_directories(tests/library/google_test/googlemock/include)
 
 
-include_directories("lib/glfw-3.3.1/include" "lib/glad-c/include/" "lib/stb/" "lib/glm/")
+# option(GLFW_BUILD_DOCS OFF)
+# option(GLFW_BUILD_EXAMPLES OFF)
+# option(GLFW_BUILD_TESTS OFF)
 
-file(GLOB DEPS_SOURCES lib/glad-c/src/glad.c)
-source_group("lib" FILES ${DEPS_SOURCES})
 
-add_executable(${PROJECT_NAME} src/main.cpp ${DEPS_SOURCES} src/gl_debug.h src/Window.h src/Window.cpp src/VertexArrayBuffer.cpp src/VertexArrayBuffer.h src/gl_debug.cpp src/Loader.cpp src/Loader.h src/debug.cpp src/debug.h src/Entity.cpp src/Entity.h tests/EntityTest.h tests/EntityTest.cpp src/math/Matrix.cpp src/math/Matrix.h tests/MatrixTest.cpp tests/MatrixTest.h src/Shader.cpp src/Shader.h tests/TemporaryTest.cpp tests/TemporaryTest.h src/Texture.cpp src/Texture.h src/InputHandler.cpp src/InputHandler.h src/Material.cpp src/Material.h src/Components/Displacement.h src/Components/Graphics.h src/Renderer.cpp src/Renderer.h)
+if (APPLE)
+    add_definitions(-DGTEST_USE_OWN_TR1_TUPLE)
+    add_definitions(-D__GLIBCXX__)
+endif (APPLE)
+
+
+set(DEPENDENCY_SOURCE_FILES lib/glad-c/src/glad.c)
+#source_group(lib FILES ${DEPS_SOURCES})
+
+add_executable(${PROJECT_NAME} ${SOURCE_FILES} ${DEPENDENCY_SOURCE_FILES})
+add_executable(${PROJECT_NAME}_tests ${TEST_SOURCE_FILES} ${DEPENDENCY_SOURCE_FILES})
+
 target_link_libraries(${PROJECT_NAME} glfw ${GLFW_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} glfw ${GLFW_LIBRARIES})
+target_link_libraries(${PROJECT_NAME}_tests gtest gtest_main)

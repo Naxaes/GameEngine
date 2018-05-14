@@ -4,5 +4,5 @@
 
 #include "InputHandler.h"
 
-#include "window.h"
+#include "Window.h"
 

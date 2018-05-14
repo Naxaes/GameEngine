@@ -1,0 +1,13 @@
+//
+// Created by Ted Klein Bergman on 3/30/18.
+//
+
+#ifndef OPENGLPROJECT_CACHEALIGNMENT_H
+#define OPENGLPROJECT_CACHEALIGNMENT_H
+
+
+#define RUN_CACHEALIGNMENT_TEST false
+
+
+
+#endif //OPENGLPROJECT_CACHEALIGNMENT_H

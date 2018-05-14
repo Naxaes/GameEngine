@@ -4,7 +4,7 @@
 
 #include "Entity.h"
 
-
+#if 0
 template <typename T, unsigned int size>
 class ComponentArray
 {
@@ -182,3 +182,4 @@ public:
 
     }
 };
+#endif
