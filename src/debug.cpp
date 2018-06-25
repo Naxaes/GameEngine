@@ -6,7 +6,8 @@
 
 #include <iostream>
 
-void _assertion(bool condition, const char* message, const char* condition_string, const char* file_name, int line, ...)
+void Implementation::assertion(
+        bool condition, const char* message, const char* condition_string, const char* file_name, int line, ...)
 {
     if (!condition)
     {

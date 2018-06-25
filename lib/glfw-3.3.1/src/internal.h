@@ -402,7 +402,7 @@ struct _GLFWwindow
 {
     struct _GLFWwindow* next;
 
-    // Window settings and state
+    // window settings and state
     GLFWbool            resizable;
     GLFWbool            decorated;
     GLFWbool            autoIconify;

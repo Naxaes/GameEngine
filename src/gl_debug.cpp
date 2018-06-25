@@ -37,7 +37,10 @@ const char* error_to_string(GLuint error)
             error_message = GET_VARIABLE_NAME(GL_INVALID_FRAMEBUFFER_OPERATION);
             break;
         default:
-            error_message = "UNKNOWN_ERROR";
+            unsigned int size = 100;
+            char temp_message[size];
+            snprintf(temp_message, size, "UNKNOWN ERROR %d", error);
+            error_message = temp_message;
     }
 
     return error_message;

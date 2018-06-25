@@ -11,7 +11,6 @@
 
 const char* error_to_string(GLuint error);
 void clear_errors();
-
 void print_errors(const char* function_name, const char* file_name, int line);
 
 #endif // OPENGLPROJECT_GL_DEBUG_H
